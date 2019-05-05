@@ -23,7 +23,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos');
 Route::post('/movimientos', 'MovimientoController@setmovimiento')->name('movimientos');
-Route::get('/caja', 'DashboardCajaController@index')->name('caja');
+Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
 Route::get('/template', function(){
     return view('layouts.admin-bckp');
 });

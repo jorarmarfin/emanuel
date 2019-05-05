@@ -62,27 +62,9 @@
 							<nav>
 								<ul class="nav nav-pills" id="mainNav">
 									<li class="dropdown active">
-									    <a class="nav-link dropdown-toggle" href="#">
+									    <a class="nav-link" href="{{ route('home') }}">
 									        Dashboard
 										</a>  
-										<ul class="dropdown-menu">
-									        <li>
-									            <a class="nav-link" href="{{ route('caja') }}">
-									                Caja
-									            </a>
-									        </li>
-									        <li>
-									            <a class="nav-link" href="index.html">
-									                Actividad economica
-									            </a>
-									        </li>
-									    </ul>
-  
-									</li>
-									<li class="">
-									    <a class="nav-link " href="{{ route('movimientos') }}">
-									        Movimientos
-									    </a>
 									</li>
 									<li class="dropdown">
 									    <a class="nav-link dropdown-toggle" href="#">
@@ -90,13 +72,23 @@
 									    </a>
 									    <ul class="dropdown-menu">
 									        <li>
-									            <a class="nav-link" href="pages-signup.html">
-									                Lista
+									            <a class="nav-link" href="{{ route('caja.dashboard') }}">
+									                Dashboard
 									            </a>
 									        </li>
 									        <li>
 									            <a class="nav-link" href="pages-signup.html">
-									                Tarjetas
+									                Balance mensual
+									            </a>
+									        </li>
+									        <li>
+									            <a class="nav-link" href="pages-signup.html">
+									                Cierre mensual
+									            </a>
+									        </li>
+									        <li>
+									            <a class="nav-link" href="pages-signup.html">
+									                Deudas
 									            </a>
 									        </li>
 									    </ul>
@@ -108,7 +100,7 @@
 									    <ul class="dropdown-menu">
 									        <li>
 									            <a class="nav-link" href="pages-signup.html">
-									                Lista
+									                Dashboard
 									            </a>
 									        </li>
 									        <li>
@@ -118,6 +110,17 @@
 									        </li>
 									    </ul>
 									</li>
+									<li class="">
+									    <a class="nav-link " href="{{ route('movimientos') }}">
+									        Movimientos
+									    </a>
+									</li>
+									<li class="">
+									    <a class="nav-link " href="{{ route('movimientos') }}">
+									        Deudas
+									    </a>
+									</li>
+									
 									
 								</ul>
 							</nav>
