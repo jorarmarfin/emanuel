@@ -101,4 +101,4 @@
     </div>
 </div>
 @endsection
-@section('titulo-pagina','Balance mensual')
+@section('titulo-pagina','Balance mensual de '.$mes." del ".$year)
