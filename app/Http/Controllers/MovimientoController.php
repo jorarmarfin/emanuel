@@ -16,6 +16,6 @@ class MovimientoController extends Controller
     public function setmovimiento(Request $request)
     {
         Movimiento::create($request->all());
-        return view('home');        
+        return redirect()->route('caja.dashboard');        
     }
 }

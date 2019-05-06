@@ -24,6 +24,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos');
 Route::post('/movimientos', 'MovimientoController@setmovimiento')->name('movimientos');
 Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
+Route::get('/balance-mensual', 'BalanceMensualController@index')->name('balance');
+Route::post('/balance-mensual', 'BalanceMensualController@balance')->name('balance.consultar');
+
+
+
 Route::get('/template', function(){
     return view('layouts.admin-bckp');
 });

@@ -23,7 +23,11 @@
                 <div class="form-check ">
                     <input class="form-check-input" type="radio" name="tipo" value="Salida" id="Salida">
                     <label class="form-check-label" for="Salida">Salida</label>
-                </div>                
+                </div>    
+                <div class="form-group">
+                    <label for="fecha"><strong>Fecha</strong></label>
+                    {!! Form::textarea('observacion',null,['class'=>'form-control','rows'=>'3']) !!}
+                </div>            
                 <button type="submit" class="btn btn-primary">Submit</button>
             {!! Form::close() !!}
         </div>

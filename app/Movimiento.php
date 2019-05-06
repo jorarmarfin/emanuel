@@ -17,4 +17,8 @@ class Movimiento extends Model
         return $concepto->nombre;
         
     }
+    public function scopeMovimientoMensual($query,$mes,$year,$tipo)
+    {
+        return $query->whereMonth('fecha',$mes)->whereYear('fecha',$year)->where('tipo',$tipo);
+    }
 }

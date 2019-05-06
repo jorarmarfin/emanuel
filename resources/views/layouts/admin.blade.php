@@ -77,7 +77,7 @@
 									            </a>
 									        </li>
 									        <li>
-									            <a class="nav-link" href="pages-signup.html">
+									            <a class="nav-link" href="{{ route('balance') }}">
 									                Balance mensual
 									            </a>
 									        </li>
@@ -176,7 +176,7 @@
 			<div class="inner-wrapper">
 				<section role="main" class="content-body">
 					<header class="page-header">
-						<h2>Emanuel</h2>
+						<h2>Emanuel > @yield('titulo-pagina','')</h2>
 					
 						<div class="right-wrapper text-right">
 							<ol class="breadcrumbs">
