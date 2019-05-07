@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Resuman;
 use App\Movimiento;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 
 class BalanceMensualController extends Controller
@@ -25,7 +26,8 @@ class BalanceMensualController extends Controller
         $ingresos = [];
         $egresos = [];
         $mes = null; $year=null; $total_ingresos = 0;
-        return view('balance',compact('ingresos','egresos','meses','years','mes','year','total_ingresos'));
+        $sw = 0;
+        return view('balance',compact('ingresos','egresos','meses','years','mes','year','sw'));
     }
     public function balance(Request $request)
     {
@@ -33,10 +35,17 @@ class BalanceMensualController extends Controller
         $year = $request->get('year');
         $meses = $this->meses;
         $years = $this->years;
-        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->orderby('fecha','asc')->get();
+        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
+        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
+        $total_oingresos = $oingresos->sum('monto');
+
         $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
-        return view('balance',compact('ingresos','egresos','meses','years','mes','year','total_ingresos'));
+        $total_egresos = $egresos->sum('monto');
+        $resumen = Resuman::MovimientoMensual($mes,$year)->first();
+        $sw = 1;
+        return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
+                    'resumen','oingresos','total_oingresos'));
     }
     public function getDatos()
     {

@@ -16,6 +16,7 @@
                     <label for="concepto"><strong>concepto</strong></label>
                     {!! Form::select('idconcepto',$conceptos,null,['class'=>'form-control']) !!}
                 </div>
+                <label for="Tipo"><strong>Tipo</strong></label>
                 <div class="form-check ">
                     <input class="form-check-input" type="radio" name="tipo" value="Entrada" id="Entrada">
                     <label class="form-check-label" for="Entrada">Entrada</label>
@@ -23,6 +24,15 @@
                 <div class="form-check ">
                     <input class="form-check-input" type="radio" name="tipo" value="Salida" id="Salida">
                     <label class="form-check-label" for="Salida">Salida</label>
+                </div>    
+                <label for="Excluir"><strong>Excluir</strong></label>
+                <div class="form-check ">
+                    <input class="form-check-input" type="radio" name="excluir" value="1" id="Si">
+                    <label class="form-check-label" for="Si">Si</label>
+                </div>
+                <div class="form-check ">
+                    <input class="form-check-input" type="radio" name="excluir" value="0" id="No" checked>
+                    <label class="form-check-label" for="No">No</label>
                 </div>    
                 <div class="form-group">
                     <label for="fecha"><strong>Fecha</strong></label>

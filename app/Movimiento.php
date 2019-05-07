@@ -21,4 +21,9 @@ class Movimiento extends Model
     {
         return $query->whereMonth('fecha',$mes)->whereYear('fecha',$year)->where('tipo',$tipo);
     }
+    public function scopeExcluir($query,$cond)
+    {
+        $retVal = ($cond=='Si') ? 1 : 0 ;
+        return $query->where('excluir',$retVal);
+    }
 }
