@@ -10,7 +10,7 @@ class MovimientoController extends Controller
 {
     public function index()
     {
-        $conceptos = Concepto::pluck('nombre','id')->toarray();
+        $conceptos = Concepto::where('actividad',0)->pluck('nombre','id')->toarray();
         return view('movimientos',compact('conceptos'));
     }
     public function setmovimiento(Request $request)
