@@ -216,8 +216,8 @@
             <div class="text-right alert alert-warning">
                 <span class="text-uppercase"> total S/. {{ number_format($total_oingresos+$total_ingresos+$resumen->saldo_inicial,2) }} </span>
             </div>
-            <div class="text-right alert alert-default">
-                {!! Form::submit('Cerrar caja del mes',['class'=>'btn btn-warning']) !!}
+            <div class="text-right">
+                {!! Form::submit('Cerrar caja del mes',['class'=>'btn btn-danger']) !!}
             </div>
         </section>
     </div>
