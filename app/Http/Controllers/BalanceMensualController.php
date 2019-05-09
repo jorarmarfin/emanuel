@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Resuman;
 use App\Concepto;
+use Carbon\Carbon;
 use App\Movimiento;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -39,29 +40,49 @@ class BalanceMensualController extends Controller
 
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
-        $this->porcentajes($mes,$year,$total_ingresos);
-        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
-        $total_oingresos = $oingresos->sum('monto');
-
-        $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
-        $total_egresos = $egresos->sum('monto');
-        $resumen = Resuman::MovimientoMensual($mes,$year)->first();
-        $sw = $ingresos->count();
-        return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
-                    'resumen','oingresos','total_oingresos'));
+        if ($total_ingresos>0) {
+            $rcc = $this->porcentajes($mes,$year,$total_ingresos);
+            $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
+            $total_oingresos = $oingresos->sum('monto');
+    
+            $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
+            $total_egresos = $egresos->sum('monto');
+            $resumen = Resuman::MovimientoMensual($mes,$year)->first();
+            $sw = $ingresos->count();
+            $saldo_mes_siguiente = $resumen->saldo_inicial + $total_ingresos + $total_oingresos - $total_egresos;
+            return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
+                        'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente'));
+        }else {
+            $request->session()->flash('flash_message', 'Task was successful!');
+            return back();
+        }
     }
     public function porcentajes($mes,$year,$total_ingresos)
     {
         $concepto = Concepto::select('id')->where('nombre','Porcentajes RCC')->first();
-        $pregunta = Movimiento::MovimientoMensual($mes,$year,'Entrada')->where('idconcepto',$concepto->id)->Excluir('No')->get();
-        if ($pregunta->count()==0) {
-            
-            $tres = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
-            $suma_ingresos = $total_ingresos-$tres[2]->monto;
+        $ofrendas = Concepto::select('id')->where('nombre','Ofrenda de Sabado')->first();
+        $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->Excluir('No')->get();
+        
+        $tres = Movimiento::MovimientoTerceraSemana($mes,$year,'Entrada',$ofrendas->id)->orderby('fecha','asc')->get();
 
-            $rcc['zona'] = 0.1*$suma_ingresos;
-            dd($suma_ingresos);
+        $suma_ingresos = $total_ingresos-$tres[2]->monto;
+
+        $rcc['diocesis'] = 0.3*$suma_ingresos;
+        $rcc['nacional'] = $tres[2]->monto;
+        $rcc['sacerdotes'] = 0.5*$suma_ingresos;
+        $rcc['zona'] = 0.15*$suma_ingresos;
+        $rcc['total'] = $suma_ingresos*(0.95)+$tres[2]->monto;
+        if ($pregunta->count()==0) {
+            $fecha = Carbon::createFromDate($year, $mes+1, 1)->sub(1, 'days');
+            Movimiento::create([
+                'monto'=>$rcc['total'],
+                'fecha'=>$fecha->format('Y-m-d'),
+                'tipo'=>'Salida',
+                'idconcepto'=>$concepto->id,
+                'excluir'=>0,
+            ]);
         }
+        return $rcc;
     }
     public function getDatos()
     {

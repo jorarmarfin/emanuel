@@ -1,6 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
+@if(Session::has('flash_message'))
+{{Session::get('flash_message')}}
+@endif
 <div class="row">
     <div class="col-md-12">
         <section class="card">
@@ -173,31 +176,31 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>10%</td>
+                            <td>15%</td>
                             <td>Zona</td>
-                            <td class="text-right">S/. xxx</td>
+                            <td class="text-right">S/. {{ $rcc['zona'] }}</td>
                         </tr>
                         <tr>
-                            <td>20%</td>
+                            <td>30%</td>
                             <td>Diocesis</td>
-                            <td class="text-right">S/. xxx</td>
+                            <td class="text-right">S/. {{ $rcc['diocesis'] }}</td>
                         </tr>
                         <tr>
-                            <td>10%</td>
+                            <td>5%</td>
                             <td>Sacerdotes</td>
-                            <td class="text-right">S/. xxx</td>
+                            <td class="text-right">S/. {{ $rcc['sacerdotes'] }}</td>
                         </tr>
                         <tr>
                             <td>3 S</td>
                             <td>Nacional</td>
-                            <td class="text-right">S/. xxx</td>
+                            <td class="text-right">S/. {{ $rcc['nacional'] }}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <th>#</th>
                             <th>TOTAL</th>
-                            <th class="text-right">S/. xxx</th>
+                            <th class="text-right">S/. {{ $rcc['total'] }}</th>
                         </tr>
                     </tfoot>
                     
@@ -224,13 +227,13 @@
     <div class="col-xl-6">   
         <section class="card">
             <div class=" text-right alert alert-danger">
-                <span class="text-uppercase"> Egreso total del mes S/. {{ number_format($total_oingresos+$total_ingresos,2) }} </span>
+                <span class="text-uppercase"> Egreso total del mes S/. {{ number_format($total_egresos,2) }} </span>
             </div>
             <div class="text-right alert alert-danger">
-                <span class="text-uppercase"> Saldo para el mes siguiente S/. {{ number_format($total_oingresos+$total_ingresos+$resumen->saldo_inicial,2) }} </span>
+                <span class="text-uppercase"> Saldo para el mes siguiente S/. {{ number_format($saldo_mes_siguiente,2) }} </span>
             </div>
             <div class="text-right alert alert-warning">
-                <span class="text-uppercase"> total S/. {{ number_format($total_oingresos+$total_ingresos+$resumen->saldo_inicial,2) }} </span>
+                <span class="text-uppercase"> total S/. {{ number_format($total_egresos+$saldo_mes_siguiente,2) }} </span>
             </div>
         </section>
     </div>
