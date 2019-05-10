@@ -26,6 +26,9 @@ Route::post('/movimientos', 'MovimientoController@setmovimiento')->name('movimie
 Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
 Route::get('/balance-mensual', 'BalanceMensualController@index')->name('balance');
 Route::post('/balance-mensual', 'BalanceMensualController@balance')->name('balance.consultar');
+Route::post('/cierre-mensual', 'BalanceMensualController@cierre')->name('balance.cierre');
+
+
 
 
 

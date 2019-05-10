@@ -2,7 +2,7 @@
 
 @section('content')
 @if(Session::has('flash_message'))
-<span class="mensaje" style="display:none;">{{Session::get('flash_message')}}</span>
+<span class="mensaje" >{{Session::get('flash_message')}}</span>
 @endif
 <div class="row">
     <div class="col-md-12">
@@ -220,7 +220,15 @@
                 <span class="text-uppercase"> total S/. {{ number_format($total_oingresos+$total_ingresos+$resumen->saldo_inicial,2) }} </span>
             </div>
             <div class="text-right">
+                {!! Form::open(['route' => 'balance.cierre', 'method' => 'post']) !!}
+                    {!! Form::hidden('month',$mes) !!}
+                    {!! Form::hidden('year',$year) !!}
+                    {!! Form::hidden('ingresos',$total_ingresos + $total_oingresos) !!}
+                    {!! Form::hidden('egresos',$total_egresos) !!}
+                    {!! Form::hidden('saldo_final',$saldo_mes_siguiente) !!}
+                    {!! Form::hidden('cerrado',$resumen->cerrado) !!}
                 {!! Form::submit('Cerrar caja del mes',['class'=>'btn btn-danger']) !!}
+                {!! Form::close() !!}
             </div>
         </section>
     </div>

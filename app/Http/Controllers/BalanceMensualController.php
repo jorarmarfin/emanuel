@@ -53,7 +53,7 @@ class BalanceMensualController extends Controller
             return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
                         'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente'));
         }else {
-            $request->session()->flash('flash_message', 'Task was successful!');
+            $request->session()->flash('flash_message', 'No hay registros para esta consulta!');
             return back();
         }
     }
@@ -83,6 +83,27 @@ class BalanceMensualController extends Controller
             ]);
         }
         return $rcc;
+    }
+    public function cierre(Request $request)
+    {
+        $month = $request->get('month');
+        $year = $request->get('year');
+        $month_actual = date('m');
+        $year_actual = date('Y');
+        $cerrado = $request->get('cerrado');
+        if ($month_actual>$month && $year_actual>=$year && !$cerrado) {
+            Resuman::where('year',$year)->where('month',$month)->update([
+                'ingresos'=> $request->get('ingresos'),
+                'egresos'=> $request->get('egresos'),
+                'saldo_final'=> $request->get('saldo_final'),
+                'cerrado'=> 1,
+                ]);
+            $mensaje = 'Caja Cerrada';
+        }else{
+            $mensaje = 'No se puede cerrar la caja porque no ha finalizado el mes o la caja ha sido cerrada';
+        }
+        $request->session()->flash('flash_message',$mensaje);
+        return back();
     }
     public function getDatos()
     {
