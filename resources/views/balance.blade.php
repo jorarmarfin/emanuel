@@ -2,7 +2,7 @@
 
 @section('content')
 @if(Session::has('flash_message'))
-{{Session::get('flash_message')}}
+<span class="mensaje" style="display:none;">{{Session::get('flash_message')}}</span>
 @endif
 <div class="row">
     <div class="col-md-12">
@@ -32,185 +32,185 @@
     </div>
 </div>
 @if ($sw!=0)    
-<div class="row">
-    <div class="col-xl-6">   
-        <section class="card">
-            <header class="card-header">
-                <div class="card-actions">
-                    <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                    <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
-                </div>
+    <div class="row">
+        <div class="col-xl-6">   
+            <section class="card">
+                <header class="card-header">
+                    <div class="card-actions">
+                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                        <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                    </div>
 
-                <h2 class="card-title">Ingresos</h2>
-            </header>
-            <div class="card-body">
-                <div class="text-right text-uppercase"><strong>Saldo del mes anterior S/. {{ $resumen->saldo_inicial }}</strong></div>
-                <table class="table table-responsive-md table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Concepto</th>
-                            <th class="text-right">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($ingresos as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->fecha }} - {{ $item->concepto }} <br> <h6> {!! $item->observacion !!} </h6></td>
-                            <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>#</th>
-                            <th>TOTAL</th>
-                            <th class="text-right">S/. {{ number_format($total_ingresos,2) }}</th>
-                        </tr>
-                    </tfoot>
-                    
-                </table>
-            </div>
-        </section>
-    </div>
-    <div class="col-xl-6">
-        <section class="card">
-            <header class="card-header">
-                <div class="card-actions">
-                    <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                    <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                    <h2 class="card-title">Ingresos</h2>
+                </header>
+                <div class="card-body">
+                    <div class="text-right text-uppercase"><strong>Saldo del mes anterior S/. {{ $resumen->saldo_inicial }}</strong></div>
+                    <table class="table table-responsive-md table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Concepto</th>
+                                <th class="text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ingresos as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->fecha }} - {{ $item->concepto }} <br> <h6> {!! $item->observacion !!} </h6></td>
+                                <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>TOTAL</th>
+                                <th class="text-right">S/. {{ number_format($total_ingresos,2) }}</th>
+                            </tr>
+                        </tfoot>
+                        
+                    </table>
                 </div>
+            </section>
+        </div>
+        <div class="col-xl-6">
+            <section class="card">
+                <header class="card-header">
+                    <div class="card-actions">
+                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                        <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                    </div>
 
-                <h2 class="card-title">Egresos</h2>
-            </header>
-            <div class="card-body">
-                <table class="table table-responsive-md table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Concepto</th>
-                            <th class="text-right">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($egresos as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->fecha }} - {{ $item->concepto }} <br> <h6> {!! $item->observacion !!} </h6> </td>
-                            <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>#</th>
-                            <th>TOTAL</th>
-                            <th class="text-right">S/. {{ number_format($total_egresos,2) }}</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </section>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xl-6">   
-        <section class="card">
-            <header class="card-header">
-                <div class="card-actions">
-                    <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                    <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                    <h2 class="card-title">Egresos</h2>
+                </header>
+                <div class="card-body">
+                    <table class="table table-responsive-md table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Concepto</th>
+                                <th class="text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($egresos as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->fecha }} - {{ $item->concepto }} <br> <h6> {!! $item->observacion !!} </h6> </td>
+                                <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>TOTAL</th>
+                                <th class="text-right">S/. {{ number_format($total_egresos,2) }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
-
-                <h2 class="card-title">Otros Ingresos</h2>
-            </header>
-            <div class="card-body">
-                <table class="table table-responsive-md table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Concepto</th>
-                            <th class="text-right">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($oingresos as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->fecha }} - {{ $item->concepto }} <br> <h6> {!! $item->observacion !!} </h6></td>
-                            <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>#</th>
-                            <th>TOTAL</th>
-                            <th class="text-right">S/. {{ number_format($total_oingresos,2) }}</th>
-                        </tr>
-                    </tfoot>
-                    
-                </table>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
-    <div class="col-xl-6">   
-        <section class="card">
-            <header class="card-header">
-                <div class="card-actions">
-                    <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                    <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+    <div class="row">
+        <div class="col-xl-6">   
+            <section class="card">
+                <header class="card-header">
+                    <div class="card-actions">
+                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                        <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                    </div>
+
+                    <h2 class="card-title">Otros Ingresos</h2>
+                </header>
+                <div class="card-body">
+                    <table class="table table-responsive-md table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Concepto</th>
+                                <th class="text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($oingresos as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->fecha }} - {{ $item->concepto }} <br> <h6> {!! $item->observacion !!} </h6></td>
+                                <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>TOTAL</th>
+                                <th class="text-right">S/. {{ number_format($total_oingresos,2) }}</th>
+                            </tr>
+                        </tfoot>
+                        
+                    </table>
                 </div>
+            </section>
+        </div>
+        <div class="col-xl-6">   
+            <section class="card">
+                <header class="card-header">
+                    <div class="card-actions">
+                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                        <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                    </div>
 
-                <h2 class="card-title">Porcentajes RCC</h2>
-            </header>
-            <div class="card-body">
-                <table class="table table-responsive-md table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Concepto</th>
-                            <th class="text-right">Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>15%</td>
-                            <td>Zona</td>
-                            <td class="text-right">S/. {{ $rcc['zona'] }}</td>
-                        </tr>
-                        <tr>
-                            <td>30%</td>
-                            <td>Diocesis</td>
-                            <td class="text-right">S/. {{ $rcc['diocesis'] }}</td>
-                        </tr>
-                        <tr>
-                            <td>5%</td>
-                            <td>Sacerdotes</td>
-                            <td class="text-right">S/. {{ $rcc['sacerdotes'] }}</td>
-                        </tr>
-                        <tr>
-                            <td>3 S</td>
-                            <td>Nacional</td>
-                            <td class="text-right">S/. {{ $rcc['nacional'] }}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>#</th>
-                            <th>TOTAL</th>
-                            <th class="text-right">S/. {{ $rcc['total'] }}</th>
-                        </tr>
-                    </tfoot>
-                    
-                </table>
-            </div>
-        </section>
+                    <h2 class="card-title">Porcentajes RCC</h2>
+                </header>
+                <div class="card-body">
+                    <table class="table table-responsive-md table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Concepto</th>
+                                <th class="text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15%</td>
+                                <td>Zona</td>
+                                <td class="text-right">S/. {{ $rcc['zona'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>30%</td>
+                                <td>Diocesis</td>
+                                <td class="text-right">S/. {{ $rcc['diocesis'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>5%</td>
+                                <td>Sacerdotes</td>
+                                <td class="text-right">S/. {{ $rcc['sacerdotes'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>3 S</td>
+                                <td>Nacional</td>
+                                <td class="text-right">S/. {{ $rcc['nacional'] }}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>TOTAL</th>
+                                <th class="text-right">S/. {{ $rcc['total'] }}</th>
+                            </tr>
+                        </tfoot>
+                        
+                    </table>
+                </div>
+            </section>
+        </div>
+            
     </div>
-        
-</div>
-<div class="row">
+    <div class="row">
     <div class="col-xl-6">   
         <section class="card">
             <div class="text-right alert alert-primary">

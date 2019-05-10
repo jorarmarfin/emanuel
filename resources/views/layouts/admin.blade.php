@@ -29,6 +29,7 @@
 		<link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.theme.css') }}" />
 		<link rel="stylesheet" href="{{ asset('vendor/bootstrap-multiselect/bootstrap-multiselect.css') }}" />
 		<link rel="stylesheet" href="{{ asset('vendor/morris/morris.css') }}" />
+		<link rel="stylesheet" href="{{ asset('vendor/pnotify/pnotify.custom.css') }}" />
 
 		<!-- Theme CSS -->
 		<link rel="stylesheet" href="{{ asset('css/theme.css') }}" />
@@ -79,11 +80,6 @@
 									        <li>
 									            <a class="nav-link" href="{{ route('balance') }}">
 									                Balance mensual
-									            </a>
-									        </li>
-									        <li>
-									            <a class="nav-link" href="pages-signup.html">
-									                Cierre mensual
 									            </a>
 									        </li>
 									        <li>
@@ -237,6 +233,7 @@
 		<script src="{{ asset('vendor/jqvmap/maps/continents/jquery.vmap.europe.js') }}"></script>
 		<script src="{{ asset('vendor/jqvmap/maps/continents/jquery.vmap.north-america.js') }}"></script>
 		<script src="{{ asset('vendor/jqvmap/maps/continents/jquery.vmap.south-america.js') }}"></script>
+		<script src="{{ asset('vendor/pnotify/pnotify.custom.js') }}"></script>
 		
 		<!-- Theme Base, Components and Settings -->
 		<script src="{{ asset('js/theme.js') }}"></script>
