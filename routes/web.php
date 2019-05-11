@@ -22,11 +22,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos');
-Route::post('/movimientos', 'MovimientoController@setmovimiento')->name('movimientos');
+Route::post('/movimientos', 'MovimientoController@create')->name('movimientos');
 Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
 Route::get('/balance-mensual', 'BalanceMensualController@index')->name('balance');
 Route::post('/balance-mensual', 'BalanceMensualController@balance')->name('balance.consultar');
 Route::post('/cierre-mensual', 'BalanceMensualController@cierre')->name('balance.cierre');
+Route::get('/deudas', 'DeudasController@index')->name('deudas.index');
+Route::post('/deudas', 'DeudasController@create')->name('deudas.save');
 
 
 

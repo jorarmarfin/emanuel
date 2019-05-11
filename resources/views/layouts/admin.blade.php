@@ -112,7 +112,7 @@
 									    </a>
 									</li>
 									<li class="">
-									    <a class="nav-link " href="{{ route('movimientos') }}">
+									    <a class="nav-link " href="{{ route('deudas.index') }}">
 									        Deudas
 									    </a>
 									</li>

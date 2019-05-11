@@ -28,7 +28,14 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->fecha }} - {{ $item->concepto }}</td>
                                 <td><span class="badge badge-success">S/. {{ number_format($item->monto,2) }}</span></td>
-                                <td><span class="badge badge-warning">{{ $item->tipo }}</span></td>
+                                <td>
+                                    @if ($item->tipo == 'Entrada')
+                                        <span class="badge badge-warning">{{ $item->tipo }}</span>
+                                        @else
+                                        <span class="badge badge-danger">{{ $item->tipo }}</span>
+                                    
+                                    @endif
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
