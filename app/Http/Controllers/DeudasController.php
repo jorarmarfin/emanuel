@@ -22,6 +22,10 @@ class DeudasController extends Controller
     {
         Deuda::create($request->all());
     }
+    public function dashboard()
+    {
+        return view('deudas-dashboard');
+    }
     public function getEstados()
     {
         return [
