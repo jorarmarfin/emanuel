@@ -135,6 +135,7 @@
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ filas",
                 "lengthMenu": "_MENU_ registros"
             },
+            retrieve: true,
             responsive: true,
             ajax: "{{ url('/tabla/por pagar') }}",
             columns:[
