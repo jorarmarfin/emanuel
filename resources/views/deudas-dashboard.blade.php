@@ -127,9 +127,28 @@
     var tabporcobrar = $(".porcobrar");
     var tabpagado = $(".pagado");
     var tabcobrado = $(".cobrado");
+    
+    llenatabla('por pagar',tblxpagar);
 
     tabporpagar.click(function(){
-        tblxpagar.dataTable({
+        llenatabla('por pagar',tblxpagar);
+    });
+    tabporcobrar.click(function(){
+        llenatabla('por cobrar',tblxcobrar);
+    });
+    tabpagado.click(function(){
+        llenatabla('pagador',tblpagado);
+    });
+    tabcobrado.click(function(){
+        llenatabla('cobrado',tblcobrado);
+    });
+
+
+    function llenatabla(name,mytabla){
+        var v_url = '/tabla/'+name;
+        var v_raiz = "{{ url('/') }}";
+        var v_route = v_raiz+v_url;
+        mytabla.dataTable({
             language: {
                 "emptyTable": "No hay datos disponibles",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ filas",
@@ -137,7 +156,7 @@
             },
             retrieve: true,
             responsive: true,
-            ajax: "{{ url('/tabla/por pagar') }}",
+            ajax: v_route,
             columns:[
                 { "data": "monto", "defaultContent":""},
                 { "data": "fecha_deuda", "defaultContent":""},
@@ -151,7 +170,7 @@
                 { "data": "id", "defaultContent":""},
             ]
         });
-    });
+    }
 
 
 </script>
