@@ -36,4 +36,9 @@ class DeudasController extends Controller
             'por cobrar'=>'Por cobrar',
         ];
     }
+    public function gettabla($name)
+    {
+        $tabla['data'] = Deuda::where('estado',$name)->get();
+        return response()->json($tabla,'200');
+    }
 }

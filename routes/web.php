@@ -30,6 +30,8 @@ Route::post('/cierre-mensual', 'BalanceMensualController@cierre')->name('balance
 Route::get('/deudas', 'DeudasController@index')->name('deudas.index');
 Route::post('/deudas', 'DeudasController@create')->name('deudas.save');
 Route::get('/deudas-dashboard', 'DeudasController@dashboard')->name('deudas.dashboard');
+Route::get('/tabla/{name}', 'DeudasController@gettabla');
+
 
 
 

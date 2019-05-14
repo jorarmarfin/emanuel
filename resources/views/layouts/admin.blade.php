@@ -30,6 +30,9 @@
 		<link rel="stylesheet" href="{{ asset('vendor/bootstrap-multiselect/bootstrap-multiselect.css') }}" />
 		<link rel="stylesheet" href="{{ asset('vendor/morris/morris.css') }}" />
 		<link rel="stylesheet" href="{{ asset('vendor/pnotify/pnotify.custom.css') }}" />
+		<link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.css') }}" />
+		<link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap-theme/select2-bootstrap.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('vendor/datatables/media/css/dataTables.bootstrap4.css') }}" />
 
 		<!-- Theme CSS -->
 		<link rel="stylesheet" href="{{ asset('css/theme.css') }}" />
@@ -234,6 +237,9 @@
 		<script src="{{ asset('vendor/jqvmap/maps/continents/jquery.vmap.north-america.js') }}"></script>
 		<script src="{{ asset('vendor/jqvmap/maps/continents/jquery.vmap.south-america.js') }}"></script>
 		<script src="{{ asset('vendor/pnotify/pnotify.custom.js') }}"></script>
+		<script src="{{ asset('vendor/select2/js/select2.js') }}"></script>
+		<script src="{{ asset('vendor/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+		<script src="{{ asset('vendor/datatables/media/js/dataTables.bootstrap4.min.js') }}"></script>
 		
 		<!-- Theme Base, Components and Settings -->
 		<script src="{{ asset('js/theme.js') }}"></script>
@@ -247,6 +253,7 @@
 		<!-- Examples -->
 		<script src="{{ asset('js/examples/examples.header.menu.js') }}"></script>
 		<script src="{{ asset('js/examples/examples.dashboard.js') }}"></script>
+		@yield('scripts')
 
 	</body>
 </html>
