@@ -41,4 +41,8 @@ class DeudasController extends Controller
         $tabla['data'] = Deuda::where('estado',$name)->get();
         return response()->json($tabla,'200');
     }
+    public function contabilizar(Request $request)
+    {
+        dd($request->all());
+    }
 }

@@ -1,6 +1,29 @@
 @extends('layouts.admin')
 
 @section('content')
+ 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {!! Form::open(['route' => 'deudas.contabilizar', 'method' => 'post']) !!}
+                    {!! Form::text('monto',null,['placeholder'=>'monto','size'=>'40','aria-required'=>'true','class'=>'form-control','id'=>'monto']) !!}
+                {!! Form::close() !!}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="tabs">
@@ -217,7 +240,10 @@
                     targets:9,
                     render: function(data, type, row){
                         if (row.estado=='por pagar') {
-                            return '<a href="#modalForm" class="btn btn-primary btn-xs">Pagar</a>';
+                            var cadena = '<button type="button" href="#modalForm" class="btn btn-primary btn-xs pagar"';
+                                cadena +='id="pagar"  data-toggle="modal" data-target="#exampleModal"';
+                                cadena += ' data-monto="'+row.monto+'">Pagar</button>';
+                            return cadena;
                         }else if(row.estado=='por cobrar'){
                             return '<a href="#" class="btn btn-danger btn-xs ">Cobrar</a>';
                         }
@@ -238,6 +264,18 @@
             ]
         });
     }
+    $(function() {
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var boton = $(event.relatedTarget);
+            var monto = boton.data('monto');
+            var modal = $(this);
+            modal.find('.modal-body #monto').val(monto);
+
+        });
+
+
+    });
+
 </script>
 @endsection
 @section('titulo-pagina','Deudas Dashboard')
