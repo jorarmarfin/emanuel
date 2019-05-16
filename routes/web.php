@@ -33,6 +33,11 @@ Route::post('/deudas', 'DeudasController@create')->name('deudas.save');
 Route::get('/deudas-dashboard', 'DeudasController@dashboard')->name('deudas.dashboard');
 Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deudas.contabilizar');
 
+Route::get('/actividad-lista', 'ActividadController@lista')->name('actividad.lista');
+Route::get('/actividad-balance/{idactividad}', 'ActividadController@balance')->name('actividad.balance');
+
+
+
 Route::get('/tabla/{name}', 'DeudasController@gettabla');
 
 

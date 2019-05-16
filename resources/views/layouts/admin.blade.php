@@ -98,8 +98,8 @@
 									    </a>
 									    <ul class="dropdown-menu">
 									        <li>
-									            <a class="nav-link" href="pages-signup.html">
-									                Dashboard
+									            <a class="nav-link" href="{{ route('actividad.lista') }}">
+									                Lista
 									            </a>
 									        </li>
 									        <li>
