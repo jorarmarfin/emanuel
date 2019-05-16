@@ -40,15 +40,20 @@ class BalanceMensualController extends Controller
 
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
-        if ($total_ingresos>0) {
-            $rcc = $this->porcentajes($mes,$year,$total_ingresos);
-            $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
-            $total_oingresos = $oingresos->sum('monto');
+        $rcc = $this->porcentajes($mes,$year,$total_ingresos);
+        if ($total_ingresos>=0 ) {
+            if ($total_ingresos>0) {
+                $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
+                $total_oingresos = $oingresos->sum('monto');
+            }else{
+                $oingresos = [];
+                $total_oingresos = 0;
+            }
     
             $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
             $total_egresos = $egresos->sum('monto');
             $resumen = Resuman::MovimientoMensual($mes,$year)->first();
-            $sw = $ingresos->count();
+            $sw = 1;
             $saldo_mes_siguiente = $resumen->saldo_inicial + $total_ingresos + $total_oingresos - $total_egresos;
             return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
                         'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente'));
@@ -61,26 +66,34 @@ class BalanceMensualController extends Controller
     {
         $concepto = Concepto::select('id')->where('nombre','Porcentajes RCC')->first();
         $ofrendas = Concepto::select('id')->where('nombre','Ofrenda de Sabado')->first();
-        $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->Excluir('No')->get();
-        
         $tres = Movimiento::MovimientoTerceraSemana($mes,$year,'Entrada',$ofrendas->id)->orderby('fecha','asc')->get();
-
-        $suma_ingresos = $total_ingresos-$tres[2]->monto;
-
-        $rcc['diocesis'] = 0.3*$suma_ingresos;
-        $rcc['nacional'] = $tres[2]->monto;
-        $rcc['sacerdotes'] = 0.5*$suma_ingresos;
-        $rcc['zona'] = 0.15*$suma_ingresos;
-        $rcc['total'] = $suma_ingresos*(0.95)+$tres[2]->monto;
-        if ($pregunta->count()==0) {
-            $fecha = Carbon::createFromDate($year, $mes+1, 1)->sub(1, 'days');
-            Movimiento::create([
-                'monto'=>$rcc['total'],
-                'fecha'=>$fecha->format('Y-m-d'),
-                'tipo'=>'Salida',
-                'idconcepto'=>$concepto->id,
-                'excluir'=>0,
-            ]);
+        if ($total_ingresos>0 && $tres->count()>2) {
+            $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->Excluir('No')->get();
+            
+    
+            $suma_ingresos = $total_ingresos-$tres[2]->monto;
+    
+            $rcc['diocesis'] = 0.3*$suma_ingresos;
+            $rcc['nacional'] = $tres[2]->monto;
+            $rcc['sacerdotes'] = 0.5*$suma_ingresos;
+            $rcc['zona'] = 0.15*$suma_ingresos;
+            $rcc['total'] = $suma_ingresos*(0.95)+$tres[2]->monto;
+            if ($pregunta->count()==0) {
+                $fecha = Carbon::createFromDate($year, $mes+1, 1)->sub(1, 'days');
+                Movimiento::create([
+                    'monto'=>$rcc['total'],
+                    'fecha'=>$fecha->format('Y-m-d'),
+                    'tipo'=>'Salida',
+                    'idconcepto'=>$concepto->id,
+                    'excluir'=>0,
+                ]);
+            }
+        }else{
+            $rcc['diocesis'] = 0;
+            $rcc['nacional'] = 0;
+            $rcc['sacerdotes'] = 0;
+            $rcc['zona'] = 0;
+            $rcc['total'] = 0;
         }
         return $rcc;
     }
@@ -88,9 +101,14 @@ class BalanceMensualController extends Controller
     {
         $month = $request->get('month');
         $year = $request->get('year');
+        $day = '1';
         $month_actual = date('m');
         $year_actual = date('Y');
         $cerrado = $request->get('cerrado');
+        $fecha  = Carbon::createFromDate($year, $month, $day);
+        $fecha_next = $fecha->addMonth();
+        $year_next = $fecha_next->year;
+        $month_next = $fecha_next->month;
         if ($month_actual>$month && $year_actual>=$year && !$cerrado) {
             Resuman::where('year',$year)->where('month',$month)->update([
                 'ingresos'=> $request->get('ingresos'),
@@ -98,6 +116,11 @@ class BalanceMensualController extends Controller
                 'saldo_final'=> $request->get('saldo_final'),
                 'cerrado'=> 1,
                 ]);
+            Resuman::create([
+                'year'=> $year_next,
+                'month'=> $month_next,
+                'saldo_inicial'=> $request->get('saldo_final'),
+            ]);
             $mensaje = 'Caja Cerrada';
         }else{
             $mensaje = 'No se puede cerrar la caja porque no ha finalizado el mes o la caja ha sido cerrada';

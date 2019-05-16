@@ -205,6 +205,7 @@
 		<script src="{{ asset('vendor/popper/umd/popper.min.js') }}"></script>
 		<script src="{{ asset('vendor/bootstrap/js/bootstrap.js') }}"></script>
 		<script src="{{ asset('vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+		<script src="{{ asset('vendor/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js') }}"></script>
 		<script src="{{ asset('vendor/common/common.js') }}"></script>
 		<script src="{{ asset('vendor/nanoscroller/nanoscroller.js') }}"></script>
 		<script src="{{ asset('vendor/magnific-popup/jquery.magnific-popup.js') }}"></script>
