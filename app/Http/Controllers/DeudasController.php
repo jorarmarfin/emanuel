@@ -9,16 +9,35 @@ use App\Concepto;
 use App\Actividad;
 use App\Movimiento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class DeudasController extends Controller
 {
     public function index()
     {
         $conceptos = Concepto::where('actividad',0)->orderBy('nombre','asc')->pluck('nombre','id')->toarray();
-        $actividades = Actividad::where('activo','si')->orderBy('nombre','asc')->pluck('nombre','id')->toarray();
+        $actividades = $this->getActividades();
         $hermanos = Miembro::orderBy('nombres','asc')->pluck('nombres','id')->toarray();
         $estados = $this->getEstados();
         return view('deudas',compact('conceptos','estados','actividades','hermanos'));
+    }
+    public function indexa()
+    {
+        $conceptos = Concepto::where('actividad',1)->orderBy('nombre','asc')->pluck('nombre','id')->toarray();
+        $actividades = $this->getActividades();
+        $hermanos = Miembro::orderBy('nombres','asc')->pluck('nombres','id')->toarray();
+        $estados = $this->getEstados();
+        return view('deudas',compact('conceptos','estados','actividades','hermanos'));
+    }
+    public function getActividades()
+    {
+        $actividad = Actividad::orderBy('nombre','asc')->select('nombre','fecha','id')->get();
+        $actividades = [];
+        foreach ($actividad as $key => $value) {
+            $nombre = $value->nombre.' - '.$value->fecha;
+            $actividades = Arr::add($actividades, $value->id, $nombre);
+        }
+        return $actividades;
     }
     public function create(Request $request)
     {

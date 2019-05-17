@@ -22,6 +22,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos');
+Route::get('/movimientos-actividad', 'MovimientoController@indexa')->name('movimientos.actividad');
 Route::post('/movimientos', 'MovimientoController@create')->name('movimientos');
 Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
 Route::get('/balance-mensual', 'BalanceMensualController@index')->name('balance');
@@ -29,6 +30,7 @@ Route::post('/balance-mensual', 'BalanceMensualController@balance')->name('balan
 Route::post('/cierre-mensual', 'BalanceMensualController@cierre')->name('balance.cierre');
 
 Route::get('/deudas', 'DeudasController@index')->name('deudas.index');
+Route::get('/deudas-actividad', 'DeudasController@indexa')->name('deudas.actividad');
 Route::post('/deudas', 'DeudasController@create')->name('deudas.save');
 Route::get('/deudas-dashboard', 'DeudasController@dashboard')->name('deudas.dashboard');
 Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deudas.contabilizar');
