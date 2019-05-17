@@ -34,7 +34,7 @@ Route::get('/deudas-dashboard', 'DeudasController@dashboard')->name('deudas.dash
 Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deudas.contabilizar');
 
 Route::get('/actividad-lista', 'ActividadController@lista')->name('actividad.lista');
-Route::get('/actividad-balance/{idactividad}', 'ActividadController@balance')->name('actividad.balance');
+Route::get('/actividad-balance/{idactividadtable-responsive-md}', 'ActividadController@balance')->name('actividad.balance');
 
 
 
