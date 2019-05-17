@@ -13,8 +13,12 @@
                     {!! Form::date('fecha',null,['class'=>'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    <label for="concepto"><strong>concepto</strong></label>
+                    <label for="idconcepto"><strong>concepto</strong></label>
                     {!! Form::select('idconcepto',$conceptos,null,['class'=>'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    <label for="idactividad"><strong>Actividades</strong></label>
+                    {!! Form::select('idactividad',$actividades,null,['class'=>'form-control']) !!}
                 </div>
                 <label for="Tipo"><strong>Tipo</strong></label>
                 <div class="form-check ">

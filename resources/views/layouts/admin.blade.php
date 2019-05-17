@@ -87,9 +87,19 @@
 									        </li>
 									        <li>
 									            <a class="nav-link" href="{{ route('deudas.dashboard') }}">
-									                Deudas
+									                Dashboard Deudas
 									            </a>
-									        </li>
+											</li>
+											<li class="">
+												<a class="nav-link " href="{{ route('movimientos') }}">
+													Movimientos
+												</a>
+											</li>
+											<li class="">
+												<a class="nav-link " href="{{ route('deudas.index') }}">
+													Deudas
+												</a>
+											</li>
 									    </ul>
 									</li>
 									<li class="dropdown">
@@ -106,18 +116,18 @@
 									            <a class="nav-link" href="pages-signup.html">
 									                Tarjetas
 									            </a>
-									        </li>
+											</li>
+											<li class="">
+												<a class="nav-link " href="{{ route('movimientos.actividad') }}">
+													Movimientos
+												</a>
+											</li>
+											<li class="">
+												<a class="nav-link " href="{{ route('deudas.actividad') }}">
+													Deudas
+												</a>
+											</li>
 									    </ul>
-									</li>
-									<li class="">
-									    <a class="nav-link " href="{{ route('movimientos') }}">
-									        Movimientos
-									    </a>
-									</li>
-									<li class="">
-									    <a class="nav-link " href="{{ route('deudas.index') }}">
-									        Deudas
-									    </a>
 									</li>
 									
 									
