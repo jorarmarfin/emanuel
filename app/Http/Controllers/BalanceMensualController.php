@@ -66,17 +66,18 @@ class BalanceMensualController extends Controller
         $concepto = Concepto::select('id')->where('nombre','Porcentajes RCC')->first();
         $ofrendas = Concepto::select('id')->where('nombre','Ofrenda de Sabado')->first();
         $tres = Movimiento::MovimientoTerceraSemana($mes,$year,'Entrada',$ofrendas->id)->orderby('fecha','asc')->get();
-        if ($total_ingresos>0 && $tres->count()>2) {
-            $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->Excluir('No')->get();
+        if ($total_ingresos>0 && $tres->count()>=4) {
+            $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->get();
             
     
             $suma_ingresos = $total_ingresos-$tres[2]->monto;
     
             $rcc['diocesis'] = 0.3*$suma_ingresos;
             $rcc['nacional'] = $tres[2]->monto;
-            $rcc['sacerdotes'] = 0.5*$suma_ingresos;
+            $sacerdotes = 0.05*$suma_ingresos;
+            $rcc['sacerdotes'] = ($sacerdotes<5) ? 5 : $sacerdotes ;
             $rcc['zona'] = 0.15*$suma_ingresos;
-            $rcc['total'] = $suma_ingresos*(0.95)+$tres[2]->monto;
+            $rcc['total'] = $rcc['diocesis']+$rcc['nacional']+$rcc['sacerdotes']+$rcc['zona'];
             if ($pregunta->count()==0) {
                 $fecha = Carbon::createFromDate($year, $mes+1, 1)->sub(1, 'days');
                 Movimiento::create([
