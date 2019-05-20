@@ -82,15 +82,16 @@ class DeudasController extends Controller
                         $estado = 'cobrado';
                         break;                    
                 }
-                if ($deuda->contabilizar>0) {
+                if ($deuda->contabilizar=='si') {
+                    $txt = 'numero deuda: '.$iddeuda;
                     Movimiento::create([
                         'monto'=>$deuda->monto,
                         'fecha'=>$fecha,
                         'tipo'=>$tipo,
                         'idactividad'=>$deuda->idactividad,
                         'idconcepto'=>$deuda->idconcepto,
-                        'observacion'=>$deuda->descripcion,
-                        'iddeuda'=>$deuda->id,
+                        'observacion'=>$txt.' '.$deuda->descripcion,
+                        'iddeuda'=>$iddeuda,
                     ]);
                 }
                 $deuda->estado = $estado;

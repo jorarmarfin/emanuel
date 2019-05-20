@@ -1,6 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
+@if(Session::has('flash_message'))
+<span class="mensaje" >{{Session::get('flash_message')}}</span>
+@endif
 <div class="row">
     <div class="col-md-6">
         <section class="card">
@@ -136,5 +139,16 @@
         </section>
     </div>
 </div>
+@if ($actividad->cerrado=='no')    
+    <div class="row">
+        <div class="col-md-12">
+            {!! Form::open(['route' => 'actividad.cierre', 'method' => 'post']) !!}
+                {!! Form::hidden('idactividad',$actividad->id) !!}
+                {!! Form::hidden('ganancia',$ganancia_liquida) !!}
+                {!! Form::submit('Cerrar',['class'=>'btn btn-danger col-md-12']) !!}
+            {!! Form::close() !!}
+        </div>
+    </div>
+@endif
 @endsection
 @section('titulo-pagina','Actividad económica '.$actividad->nombre.' '.$actividad->fecha)

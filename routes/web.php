@@ -28,6 +28,7 @@ Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
 Route::get('/balance-mensual', 'BalanceMensualController@index')->name('balance');
 Route::post('/balance-mensual', 'BalanceMensualController@balance')->name('balance.consultar');
 Route::post('/cierre-mensual', 'BalanceMensualController@cierre')->name('balance.cierre');
+Route::get('/balance-mensual-reporte', 'BalanceMensualController@reporte')->name('balance.mensual.reporte');
 
 Route::get('/deudas', 'DeudasController@index')->name('deudas.index');
 Route::get('/deudas-actividad', 'DeudasController@indexa')->name('deudas.actividad');
@@ -37,6 +38,7 @@ Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deud
 
 Route::get('/actividad-lista', 'ActividadController@lista')->name('actividad.lista');
 Route::get('/actividad-balance/{idactividad}', 'ActividadController@balance')->name('actividad.balance');
+Route::post('/cierre-actividad', 'ActividadController@cierre')->name('actividad.cierre');
 
 
 

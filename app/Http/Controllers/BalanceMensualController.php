@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use App\Movimiento;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-
+use PDF;
 
 class BalanceMensualController extends Controller
 {
@@ -39,15 +39,12 @@ class BalanceMensualController extends Controller
         $years = $this->years;
 
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
-        $total_ingresos = $ingresos->sum('monto');
+        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
+        $total_ingresos = $ingresos->sum('monto'); $total_oingresos = $oingresos->sum('monto');
         $rcc = $this->porcentajes($mes,$year,$total_ingresos);
-        if ($total_ingresos>=0 ) {
-            if ($total_ingresos>0) {
-                $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
-                $total_oingresos = $oingresos->sum('monto');
-            }else{
+        if ($total_ingresos>0 || $total_oingresos>0) {
+            if ($total_oingresos=0) {
                 $oingresos = [];
-                $total_oingresos = 0;
             }
     
             $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
@@ -55,8 +52,10 @@ class BalanceMensualController extends Controller
             $resumen = Resuman::MovimientoMensual($mes,$year)->first();
             $sw = 1;
             $saldo_mes_siguiente = $resumen->saldo_inicial + $total_ingresos + $total_oingresos - $total_egresos;
-            return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
-                        'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente'));
+            return view('balance',
+                compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
+                        'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente')
+                    );
         }else {
             $request->session()->flash('flash_message', 'No hay registros para esta consulta!');
             return back();
@@ -127,6 +126,14 @@ class BalanceMensualController extends Controller
         }
         $request->session()->flash('flash_message',$mensaje);
         return back();
+    }
+    public function reporte()
+    {
+        PDF::SetTitle('FICHA DE INSCRIPCION');
+        PDF::AddPage('U','A4');
+        PDF::SetAutoPageBreak(false);
+        #EXPORTO
+        PDF::Output(public_path('storage/').'2019_05.pdf','FI');
     }
     public function getDatos()
     {

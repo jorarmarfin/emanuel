@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Deuda;
+use App\Resuman;
 use App\Actividad;
+use Carbon\Carbon;
 use App\Movimiento;
 use Illuminate\Http\Request;
 
@@ -33,4 +35,30 @@ class ActividadController extends Controller
         compact('actividad','egresos','total_egresos','ingresos','total_ingresos','xcobrar','total_xcobrar','ganancia','ganancia_liquida')
         );
     }
+    public function cierre(Request $request)
+    {
+        $actividad = Actividad::find($request->get('idactividad'));
+        $fecha = Carbon::createFromFormat('Y-m-d',$actividad->fecha);
+        $resumen = Resuman::MovimientoMensual($fecha->month,$fecha->year)->first();
+        if (!$resumen->cerrado) {
+            Movimiento::create([
+                'monto'=>$request->get('ganancia'),
+                'fecha'=>$fecha,
+                'tipo'=>'Entrada',
+                'idconcepto'=>$actividad->idconcepto,
+                'observacion'=>$actividad->nombre.'-'.$actividad->fecha,
+            ]);
+            $actividad->cerrado='si';
+            $actividad->save();
+            $mensaje = 'Caja Cerrada';
+        }else{
+            $mensaje = 'La caja ya esta cerrada para esta fecha';
+        }
+        $request->session()->flash('flash_message',$mensaje);
+        return back();
+    }
+
+
+
+
 }

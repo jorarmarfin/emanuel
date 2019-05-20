@@ -20,6 +20,7 @@
                     <th>Fin</th>
                     <th>Precio Unitario</th>
                     <th>Activo</th>
+                    <th>Cerrado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                         <td>{{ $item->fin }}</td>
                         <td>{{ $item->pu }}</td>
                         <td>{{ $item->activo }}</td>
+                        <td>{{ $item->cerrado }}</td>
                         <td><a href="{{ route('actividad.balance',$item->id) }}" class="btn btn-primary">Ver</a></td>
                     </tr>
                 @endforeach
