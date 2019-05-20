@@ -31,7 +31,7 @@ CREATE TABLE `actividad` (
   `pu` float DEFAULT NULL,
   `activo` tinytext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `actividad` (
 
 LOCK TABLES `actividad` WRITE;
 /*!40000 ALTER TABLE `actividad` DISABLE KEYS */;
-INSERT INTO `actividad` VALUES (1,'Arroz con leche','2019-04-27',NULL,NULL,2,'si');
+INSERT INTO `actividad` VALUES (1,'Arroz con leche','2019-04-27',NULL,NULL,2,'si'),(2,'Pollada','2019-05-18',100,200,12,'si');
 /*!40000 ALTER TABLE `actividad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +57,7 @@ CREATE TABLE `concepto` (
   `activo` tinyint(4) DEFAULT '1',
   `actividad` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,7 @@ CREATE TABLE `concepto` (
 
 LOCK TABLES `concepto` WRITE;
 /*!40000 ALTER TABLE `concepto` DISABLE KEYS */;
-INSERT INTO `concepto` VALUES (1,'Ofrenda de Sabado',1,0),(2,'Libro del seminario',1,0),(3,'Venta de Queque',1,0),(4,'Venta de pan con pollo',1,0),(5,'Venta de mazamorra y arroz con leche',1,0),(6,'Ofrenda Fam. Pacheco',1,0),(7,'Ofrenda Fam. Salazar',1,0),(8,'Flores para la misa',1,0),(9,'Ofrenda Ponente',1,0),(10,'Pasajes Retiro',1,0),(11,'Snacks',1,0),(12,'Mobilidad',1,0),(13,'Compra de película',1,0),(14,'Entrada de concierto',1,0),(15,'Torta de cumpleaños',1,0),(16,'Porcentajes RCC',1,0);
+INSERT INTO `concepto` VALUES (1,'Ofrenda de Sabado',1,0),(2,'Libro del seminario',1,0),(3,'Venta de Queque',1,0),(4,'Venta de pan con pollo',1,0),(5,'Venta de mazamorra y arroz con leche',1,0),(6,'Ofrenda Fam. Pacheco',1,0),(7,'Ofrenda Fam. Salazar',1,0),(8,'Flores para la misa',1,0),(9,'Ofrenda Ponente',1,0),(10,'Pasajes Retiro',1,0),(11,'Snacks',1,0),(12,'Mobilidad',1,0),(13,'Compra de película',1,0),(14,'Entrada de concierto',1,0),(15,'Torta de cumpleaños',1,0),(16,'Porcentajes RCC',1,0),(17,'Compra de Pollo',1,1),(18,'Compra de Papas',1,1),(19,'Consumo actividad',1,1),(20,'Actividad Económica',1,0);
 /*!40000 ALTER TABLE `concepto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +165,7 @@ CREATE TABLE `deudas` (
   `contabilizar` tinytext COLLATE utf8mb4_unicode_ci,
   `idmiembro` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,7 +174,7 @@ CREATE TABLE `deudas` (
 
 LOCK TABLES `deudas` WRITE;
 /*!40000 ALTER TABLE `deudas` DISABLE KEYS */;
-INSERT INTO `deudas` VALUES (2,123,'2019-05-11',13,'pagado','2019-05-16','Compre la pelicula winni de poo',NULL,'no',1),(3,12,'2019-05-15',14,'cobrado','2019-05-16','cobra a gaby concierto',NULL,'si',1);
+INSERT INTO `deudas` VALUES (2,123,'2019-05-11',13,'pagado','2019-05-16','Compre la pelicula winni de poo',NULL,'no',1),(3,12,'2019-05-15',14,'cobrado','2019-05-16','cobra a gaby concierto',NULL,'si',1),(4,100,'2019-05-18',19,'por cobrar',NULL,NULL,2,'si',1),(5,100,'2019-05-18',18,'por cobrar',NULL,NULL,2,'si',2);
 /*!40000 ALTER TABLE `deudas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,7 +257,7 @@ CREATE TABLE `miembro` (
   `telefono` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tipo` tinytext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -266,7 +266,7 @@ CREATE TABLE `miembro` (
 
 LOCK TABLES `miembro` WRITE;
 /*!40000 ALTER TABLE `miembro` DISABLE KEYS */;
-INSERT INTO `miembro` VALUES (1,'Mayta','Campos','Luis Fernando','991801039','Hermano');
+INSERT INTO `miembro` VALUES (1,'Mayta','Campos','Luis Fernando','991801039','Hermano'),(2,'Sánchez','Torres','Lucy Marisol','991801039','Hermano');
 /*!40000 ALTER TABLE `miembro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -313,7 +313,7 @@ CREATE TABLE `movimiento` (
   `excluir` tinyint(4) DEFAULT '0',
   `iddeuda` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -322,7 +322,7 @@ CREATE TABLE `movimiento` (
 
 LOCK TABLES `movimiento` WRITE;
 /*!40000 ALTER TABLE `movimiento` DISABLE KEYS */;
-INSERT INTO `movimiento` VALUES (8,17.1,'2019-01-05','Entrada',1,NULL,'<p>Bajada de reyes</p>',0,NULL),(9,8.7,'2019-01-12','Entrada',1,NULL,NULL,0,NULL),(10,13.2,'2019-01-19','Entrada',1,NULL,'<p>No se pidi&oacute; ofrenda</p>',0,NULL),(11,0,'2019-01-26','Entrada',1,NULL,NULL,0,NULL),(12,17.8,'2019-01-26','Entrada',1,NULL,NULL,0,NULL),(13,28,'2019-01-05','Entrada',3,NULL,NULL,1,NULL),(14,100,'2019-01-02','Entrada',6,NULL,NULL,1,NULL),(15,30,'2019-01-01','Salida',8,NULL,NULL,0,NULL),(16,10,'2019-01-01','Salida',9,NULL,NULL,0,NULL),(17,20,'2019-01-07','Salida',12,NULL,'Pasaje para retiros',0,NULL),(18,10,'2019-01-08','Salida',11,NULL,NULL,0,NULL),(19,5,'2019-01-08','Salida',13,NULL,'<p>Para los ni&ntilde;os</p>',0,NULL),(20,12,'2019-01-16','Salida',14,NULL,'Para Gaby',0,NULL),(21,4,'2019-01-29','Salida',15,NULL,'Para Nataly',0,NULL),(22,5,'2019-01-08','Salida',12,NULL,'<p>Moto para trasladar laptop multimedia, radio</p>',0,NULL),(25,54.62,'2019-01-31','Salida',16,NULL,NULL,0,NULL),(28,123,'2019-02-16','Salida',13,NULL,'Compre la pelicula winni de poo',0,2),(30,12,'2019-02-17','Entrada',14,NULL,'cobra a gaby concierto',0,3);
+INSERT INTO `movimiento` VALUES (8,17.1,'2019-01-05','Entrada',1,NULL,'<p>Bajada de reyes</p>',0,NULL),(9,8.7,'2019-01-12','Entrada',1,NULL,NULL,0,NULL),(10,13.2,'2019-01-19','Entrada',1,NULL,'<p>No se pidi&oacute; ofrenda</p>',0,NULL),(11,0,'2019-01-26','Entrada',1,NULL,NULL,0,NULL),(12,17.8,'2019-01-26','Entrada',1,NULL,NULL,0,NULL),(13,28,'2019-01-05','Entrada',3,NULL,NULL,1,NULL),(14,100,'2019-01-02','Entrada',6,NULL,NULL,1,NULL),(15,30,'2019-01-01','Salida',8,NULL,NULL,0,NULL),(16,10,'2019-01-01','Salida',9,NULL,NULL,0,NULL),(17,20,'2019-01-07','Salida',12,NULL,'Pasaje para retiros',0,NULL),(18,10,'2019-01-08','Salida',11,NULL,NULL,0,NULL),(19,5,'2019-01-08','Salida',13,NULL,'<p>Para los ni&ntilde;os</p>',0,NULL),(20,12,'2019-01-16','Salida',14,NULL,'Para Gaby',0,NULL),(21,4,'2019-01-29','Salida',15,NULL,'Para Nataly',0,NULL),(22,5,'2019-01-08','Salida',12,NULL,'<p>Moto para trasladar laptop multimedia, radio</p>',0,NULL),(25,54.62,'2019-01-31','Salida',16,NULL,NULL,0,NULL),(28,123,'2019-02-16','Salida',13,NULL,'Compre la pelicula winni de poo',0,2),(30,12,'2019-02-17','Entrada',14,NULL,'cobra a gaby concierto',0,3),(31,500,'2019-05-17','Salida',17,2,NULL,0,NULL),(32,200,'2019-05-17','Salida',18,2,NULL,0,NULL),(33,1200,'2019-05-18','Entrada',19,2,NULL,0,NULL);
 /*!40000 ALTER TABLE `movimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -649,4 +649,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-16  1:25:07
+-- Dump completed on 2019-05-17  1:19:38

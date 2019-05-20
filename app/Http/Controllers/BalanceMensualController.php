@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use App\Movimiento;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-
+use PDF;
 
 class BalanceMensualController extends Controller
 {
@@ -39,15 +39,12 @@ class BalanceMensualController extends Controller
         $years = $this->years;
 
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
-        $total_ingresos = $ingresos->sum('monto');
+        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
+        $total_ingresos = $ingresos->sum('monto'); $total_oingresos = $oingresos->sum('monto');
         $rcc = $this->porcentajes($mes,$year,$total_ingresos);
-        if ($total_ingresos>=0 ) {
-            if ($total_ingresos>0) {
-                $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
-                $total_oingresos = $oingresos->sum('monto');
-            }else{
+        if ($total_ingresos>0 || $total_oingresos>0) {
+            if ($total_oingresos=0) {
                 $oingresos = [];
-                $total_oingresos = 0;
             }
     
             $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
@@ -55,8 +52,10 @@ class BalanceMensualController extends Controller
             $resumen = Resuman::MovimientoMensual($mes,$year)->first();
             $sw = 1;
             $saldo_mes_siguiente = $resumen->saldo_inicial + $total_ingresos + $total_oingresos - $total_egresos;
-            return view('balance',compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
-                        'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente'));
+            return view('balance',
+                compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
+                        'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente')
+                    );
         }else {
             $request->session()->flash('flash_message', 'No hay registros para esta consulta!');
             return back();
@@ -67,17 +66,18 @@ class BalanceMensualController extends Controller
         $concepto = Concepto::select('id')->where('nombre','Porcentajes RCC')->first();
         $ofrendas = Concepto::select('id')->where('nombre','Ofrenda de Sabado')->first();
         $tres = Movimiento::MovimientoTerceraSemana($mes,$year,'Entrada',$ofrendas->id)->orderby('fecha','asc')->get();
-        if ($total_ingresos>0 && $tres->count()>2) {
-            $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->Excluir('No')->get();
+        if ($total_ingresos>0 && $tres->count()>=4) {
+            $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->get();
             
     
             $suma_ingresos = $total_ingresos-$tres[2]->monto;
     
             $rcc['diocesis'] = 0.3*$suma_ingresos;
             $rcc['nacional'] = $tres[2]->monto;
-            $rcc['sacerdotes'] = 0.5*$suma_ingresos;
+            $sacerdotes = 0.05*$suma_ingresos;
+            $rcc['sacerdotes'] = ($sacerdotes<5) ? 5 : $sacerdotes ;
             $rcc['zona'] = 0.15*$suma_ingresos;
-            $rcc['total'] = $suma_ingresos*(0.95)+$tres[2]->monto;
+            $rcc['total'] = $rcc['diocesis']+$rcc['nacional']+$rcc['sacerdotes']+$rcc['zona'];
             if ($pregunta->count()==0) {
                 $fecha = Carbon::createFromDate($year, $mes+1, 1)->sub(1, 'days');
                 Movimiento::create([
@@ -127,6 +127,14 @@ class BalanceMensualController extends Controller
         }
         $request->session()->flash('flash_message',$mensaje);
         return back();
+    }
+    public function reporte()
+    {
+        PDF::SetTitle('FICHA DE INSCRIPCION');
+        PDF::AddPage('U','A4');
+        PDF::SetAutoPageBreak(false);
+        #EXPORTO
+        PDF::Output(public_path('storage/').'2019_05.pdf','FI');
     }
     public function getDatos()
     {

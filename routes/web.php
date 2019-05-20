@@ -28,6 +28,7 @@ Route::get('/caja', 'DashboardCajaController@index')->name('caja.dashboard');
 Route::get('/balance-mensual', 'BalanceMensualController@index')->name('balance');
 Route::post('/balance-mensual', 'BalanceMensualController@balance')->name('balance.consultar');
 Route::post('/cierre-mensual', 'BalanceMensualController@cierre')->name('balance.cierre');
+Route::get('/balance-mensual-reporte', 'BalanceMensualController@reporte')->name('balance.mensual.reporte');
 
 Route::get('/deudas', 'DeudasController@index')->name('deudas.index');
 Route::get('/deudas-actividad', 'DeudasController@indexa')->name('deudas.actividad');
@@ -36,7 +37,12 @@ Route::get('/deudas-dashboard', 'DeudasController@dashboard')->name('deudas.dash
 Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deudas.contabilizar');
 
 Route::get('/actividad-lista', 'ActividadController@lista')->name('actividad.lista');
+<<<<<<< HEAD
 Route::get('/actividad-balance/{idactividadtable-responsive-md}', 'ActividadController@balance')->name('actividad.balance');
+=======
+Route::get('/actividad-balance/{idactividad}', 'ActividadController@balance')->name('actividad.balance');
+Route::post('/cierre-actividad', 'ActividadController@cierre')->name('actividad.cierre');
+>>>>>>> 47d61d0d443ebfdc2a67c76a71d070a2667b1d09
 
 
 

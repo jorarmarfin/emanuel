@@ -25,10 +25,11 @@
                             <table class="table table-bordered table-striped mb-0" id="tbl-xpagar">
                                 <thead>
                                     <tr>
+                                        <th>id</th>
                                         <th>Monto</th>
                                         <th>Fecha Deuda</th>
                                         <th>Estado</th>
-                                        <th>Fecha</th>
+                                        <th>Fecha operación</th>
                                         <th>Concepto</th>
                                         <th>Actividad</th>
                                         <th>Miembro</th>
@@ -47,10 +48,11 @@
                             <table class="table table-bordered table-striped mb-0" id="tbl-xcobrar">
                                 <thead>
                                     <tr>
+                                        <th>id</th>
                                         <th>Monto</th>
                                         <th>Fecha Deuda</th>
                                         <th>Estado</th>
-                                        <th>Fecha</th>
+                                        <th>Fecha operacion</th>
                                         <th>Concepto</th>
                                         <th>Actividad</th>
                                         <th>Miembro</th>
@@ -69,10 +71,11 @@
                             <table class="table table-bordered table-striped mb-0" id="tbl-pagado">
                                 <thead>
                                     <tr>
+                                        <th>id</th>
                                         <th>Monto</th>
                                         <th>Fecha Deuda</th>
                                         <th>Estado</th>
-                                        <th>Fecha</th>
+                                        <th>Fecha operacion</th>
                                         <th>Concepto</th>
                                         <th>Actividad</th>
                                         <th>Miembro</th>
@@ -91,10 +94,11 @@
                                 <table class="table table-bordered table-striped mb-0" id="tbl-cobrado">
                                     <thead>
                                         <tr>
+                                            <th>id</th>
                                             <th>Monto</th>
                                             <th>Fecha Deuda</th>
                                             <th>Estado</th>
-                                            <th>Fecha</th>
+                                            <th>Fecha operacion</th>
                                             <th>Concepto</th>
                                             <th>Actividad</th>
                                             <th>Miembro</th>
@@ -205,6 +209,7 @@
                 }
             ],
             columns:[
+                { "data": "id", "defaultContent":""},
                 { "data": "monto", "defaultContent":""},
                 { "data": "fecha_deuda", "defaultContent":""},
                 { "data": "estado", "defaultContent":""},

@@ -23,7 +23,10 @@ class Movimiento extends Model
     }
     public function scopeMovimientoTerceraSemana($query,$mes,$year,$tipo,$idconcepto)
     {
-        return $query->whereMonth('fecha',$mes)->whereYear('fecha',$year)->where('tipo',$tipo)->where('excluir',0);
+        return $query->whereMonth('fecha',$mes)->whereYear('fecha',$year)
+                     ->where('tipo',$tipo)
+                     ->where('idconcepto',$idconcepto)
+                     ->where('excluir',0);
     }
     public function scopeExcluir($query,$cond)
     {
