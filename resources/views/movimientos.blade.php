@@ -22,7 +22,7 @@
                 </div>
                 <label for="Tipo"><strong>Tipo</strong></label>
                 <div class="form-check ">
-                    <input class="form-check-input" type="radio" name="tipo" value="Entrada" id="Entrada">
+                    <input class="form-check-input" type="radio" name="tipo" value="Entrada" id="Entrada" checked>
                     <label class="form-check-label" for="Entrada">Entrada</label>
                 </div>
                 <div class="form-check ">

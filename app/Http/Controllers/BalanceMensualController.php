@@ -53,13 +53,14 @@ class BalanceMensualController extends Controller
         }else{
             $oingresos = []; $total_oingresos = 0;
         }
-        if ($egresos->count()>0) {
-            $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
-            $total_egresos = $egresos->sum('monto');
-        }else{
-            $egresos = []; $total_egresos = 0;
-        }
+        
         if (isset($resumen)) {
+            if ($egresos->count()>0) {
+                $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
+                $total_egresos = $egresos->sum('monto');
+            }else{
+                $egresos = []; $total_egresos = 0;
+            }
             $saldo_inicial = $resumen->saldo_inicial;
 
             $saldo_mes_siguiente = $saldo_inicial + $total_ingresos + $total_oingresos - $total_egresos;
@@ -131,12 +132,20 @@ class BalanceMensualController extends Controller
                 'saldo_final'=> $request->get('saldo_final'),
                 'cerrado'=> 1,
                 ]);
-            Resuman::create([
-                'year'=> $year_next,
-                'month'=> $month_next,
-                'saldo_inicial'=> $request->get('saldo_final'),
-            ]);
-            $mensaje = 'Caja Cerrada';
+            $resumen = Resuman::where('year',$year_next)->where('month',$month_next)->first();
+            if (isset($resumen)) {
+                Resuman::where('id',$resumen->id)->update([
+                    'saldo_inicial'=> $request->get('saldo_final'),
+                ]);
+                $mensaje = 'Caja Actualizada';
+            }else{
+                Resuman::create([
+                    'year'=> $year_next,
+                    'month'=> $month_next,
+                    'saldo_inicial'=> $request->get('saldo_final'),
+                ]);
+                $mensaje = 'Caja Cerrada';
+            }
         }else{
             $mensaje = 'No se puede cerrar la caja porque no ha finalizado el mes o la caja ha sido cerrada';
         }
@@ -152,12 +161,12 @@ class BalanceMensualController extends Controller
         PDF::SetTitle('BALANCE MENSUAL');
         
         PDF::SetAutoPageBreak(false);
-        //$this->pdfIngreso($year,$mes);
+        $this->pdfIngreso($year,$mes);
         $this->pdfEgreso($year,$mes);
+        $archivo = public_path('storage/').$year.'_'.$mes.'.pdf';
         
-
         #EXPORTO
-        PDF::Output(public_path('storage/').'2019_05.pdf','FI');
+        PDF::Output($archivo,'FI');
         
     }
     public function pdfEgreso($year,$mes)
@@ -181,6 +190,8 @@ class BalanceMensualController extends Controller
         $resumen = Resuman::MovimientoMensual($mes,$year)->first();
         $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
         $total_egresos = $egresos->sum('monto');
+        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->orderby('fecha','asc')->get();
+        $total_ingresos = $ingresos->sum('monto');
         
         PDF::SetTextColor(9,0,255);
         #Egresos
@@ -211,6 +222,7 @@ class BalanceMensualController extends Controller
 
         }//cierre del while
 
+        $incremento += 5;
         #Totales
         PDF::SetTextColor(0);
         PDF::SetFont('helvetica', 'B', 11);
@@ -225,12 +237,22 @@ class BalanceMensualController extends Controller
         $j++;
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+10, $j*$altodecelda+$incremento);
-        PDF::Cell(140, 5, 'EGRESO TOTAL ', 1, 1, 'C');
+        PDF::Cell(140, 5, 'SALDO PARA '.$this->getMes($mes+1), 1, 1, 'C');
         #
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
-        $total = $total_egresos;
-        PDF::Cell(30, 5, 'S/. '.number_format($total,2), 1, 1, 'R');
+        $saldo_final = $total_ingresos + $resumen->saldo_inicial - $total_egresos;
+        PDF::Cell(30, 5, 'S/. '.number_format($saldo_final,2), 1, 1, 'R');
+        #
+        $j++;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'SALDO PARA '.$this->getMes($mes+1), 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        $saldo_final = $saldo_final + $total_egresos;
+        PDF::Cell(30, 5, 'S/. '.number_format($saldo_final,2), 1, 1, 'R');
     }
     public function pdfIngreso($year,$mes)
     {
