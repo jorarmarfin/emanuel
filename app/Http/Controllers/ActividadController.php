@@ -65,12 +65,117 @@ class ActividadController extends Controller
     {
         PDF::SetTitle('BALANCE MENSUAL ACTIVIDAD');
         $this->pdfIngreso($idactividad);
+        $this->pdfEgreso($idactividad);
         PDF::SetAutoPageBreak(false);
         
         $archivo = public_path('storage/').'actividad_'.$idactividad.'.pdf';
         
         #EXPORTO
         PDF::Output($archivo,'FI');
+    }
+    public function pdfEgreso($idactividad)
+    {
+        $actividad = Actividad::find($idactividad);
+        PDF::AddPage('U','A4');
+        PDF::SetXY(20,15);
+        PDF::SetFont('helvetica','b',22);
+        PDF::Cell(170,15,"HABER ".$actividad->nombre." ".$actividad->fecha,1,0,'C');
+
+        $pagina = 0;
+		$lineaActual = 0;
+		$numMaxLineas = 45;
+
+		$altodecelda=5;
+		$incremento = 35;
+		$x = 10;
+		$i = 0;
+		$j = 1;
+
+        $egresos = Movimiento::where('idactividad',$idactividad)->where('tipo','Salida')->orderBy('fecha','asc')->get();
+        $total_egresos = $egresos->sum('monto');
+
+
+        PDF::SetTextColor(9,0,255);
+        #Ingresos
+        while ($i < $egresos->count()) {
+
+			PDF::SetXY($x+10,$j*$altodecelda+$incremento);
+			PDF::SetFont('helvetica', '', 9);
+            $fecha = Carbon::parse($egresos [$i]['fecha']);
+			PDF::Cell(10, 5, $fecha->day, 1, 1, 'C');
+			#
+			PDF::SetXY($x+20,$j*$altodecelda+$incremento);
+            PDF::SetFont('helvetica', '', 9);
+			PDF::Cell(100, 5, $egresos[$i]['concepto'], 1, 1, 'L');
+			#
+			PDF::SetFont('helvetica', '', 11);
+			PDF::SetXY($x+120, $j*$altodecelda+$incremento);
+			PDF::Cell(30, 5, $egresos[$i]['montod'], 1, 1, 'R');
+            #
+            $i++;
+
+            if ($i == $egresos  ->count()) {
+                PDF::SetFont('helvetica', 'B', 11);
+                PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+                PDF::Cell(30, 5, 'S/. '.number_format($total_egresos,2), 1, 1, 'R');
+            }
+
+			$j++;
+
+        }//cierre del while
+        #RESUMEN DE ACTIVIDAD
+        $ingresos = Movimiento::where('idactividad',$idactividad)->where('tipo','Entrada')->orderby('fecha','asc')->get();
+        $total_ingresos = $ingresos->sum('monto');
+
+        $xcobrar = Deuda::where('idactividad',$idactividad)->whereIn('estado',['por cobrar','cobrado'])->get();
+        $total_xcobrar = $xcobrar->sum('monto'); 
+
+        PDF::SetTextColor(0);
+        $incremento +=5;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'INGRESO TOTAL', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, 'S/. '.number_format($total_ingresos + $total_xcobrar,2), 1, 1, 'R');
+        #
+        $j++;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'EGRESOS', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, 'S/. '.number_format($total_egresos,2), 1, 1, 'R');
+        $j++;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'GANANCIA', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        $ganancia = $total_ingresos + $total_xcobrar - $total_egresos;
+        PDF::Cell(30, 5, 'S/. '.number_format($ganancia,2), 1, 1, 'R');
+        $j++;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'POR COBRAR', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        $ganancia = $total_ingresos + $total_xcobrar - $total_egresos;
+        PDF::Cell(30, 5, 'S/. '.number_format($total_xcobrar,2), 1, 1, 'R');
+        $j++;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'GANANCIA LIQUIDA', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        $ganancia_liquida = $ganancia - $total_xcobrar;
+        PDF::Cell(30, 5, 'S/. '.number_format($ganancia_liquida,2), 1, 1, 'R');
+
     }
     public function pdfIngreso($idactividad)
     {
