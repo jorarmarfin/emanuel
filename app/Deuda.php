@@ -32,4 +32,7 @@ class Deuda extends Model
       $retVal = (isset($actividad)) ? $actividad->nombre : '---';
       return $retVal; 
     }
+    public function getMontodAttribute() {
+        return 'S/. '.number_format($this->monto,2);
+    }
 }

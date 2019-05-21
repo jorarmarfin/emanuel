@@ -104,6 +104,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Miembro</th>
+                                    <th>Estado</th>
                                     <th class="text-right">Monto</th>
                                 </tr>
                             </thead>
@@ -112,6 +113,13 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->miembro }} <br> <h6> {!! $item->observacion !!} </h6></td>
+                                    <td>
+                                        @if ($item->estado == 'por cobrar')
+                                        <span class="badge badge-danger">{{ $item->estado }}</span>
+                                        @else
+                                        <span class="badge badge-success">{{ $item->estado }}</span>
+                                        @endif
+                                    </td>
                                     <td class="text-right">S/. {{ number_format($item->monto,2) }}</td>
                                 </tr>
                                 @endforeach
@@ -131,7 +139,7 @@
     </div>
     <div class="col-md-6">
         <section class="card">
-            <span class=" text-right alert alert-primary">INGRESO S/.{{ $total_ingresos }}</span>
+            <span class=" text-right alert alert-primary">INGRESO S/.{{ $total_ingresos + $total_xcobrar }}</span>
             <span class=" text-right alert alert-danger">EGRESO S/.{{ $total_egresos }}</span>
             <span class=" text-right alert alert-warning">GANACIA S/.{{ $ganancia }}</span>
             <span class=" text-right alert alert-primary">POR COBRAR S/.{{ $total_xcobrar }}</span>
@@ -142,10 +150,11 @@
 @if ($actividad->cerrado=='no')    
     <div class="row">
         <div class="col-md-12">
-            {!! Form::open(['route' => 'actividad.cierre', 'method' => 'post']) !!}
+            {!! Form::open(['route' => 'actividad.cierre', 'method' => 'post','class'=>'row']) !!}
                 {!! Form::hidden('idactividad',$actividad->id) !!}
                 {!! Form::hidden('ganancia',$ganancia_liquida) !!}
-                {!! Form::submit('Cerrar',['class'=>'btn btn-danger col-md-12']) !!}
+                {!! Form::submit('Cerrar',['class'=>'btn btn-danger col-md-6']) !!}
+                <a href="{{ route('actividad.balance.reporte',$actividad->id) }}" class="btn btn-warning col-md-6">Imprimir</a>
             {!! Form::close() !!}
         </div>
     </div>

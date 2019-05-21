@@ -42,6 +42,7 @@ class DeudasController extends Controller
     public function create(Request $request)
     {
         Deuda::create($request->all());
+        return redirect()->route('deudas.dashboard');
     }
     public function dashboard()
     {

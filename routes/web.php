@@ -39,6 +39,9 @@ Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deud
 
 Route::get('/actividad-lista', 'ActividadController@lista')->name('actividad.lista');
 Route::get('/actividad-balance/{idactividad}', 'ActividadController@balance')->name('actividad.balance');
+Route::get('/actividad-balance-reporte/{idactividad}', 'ActividadController@reporte')->name('actividad.balance.reporte');
+Route::get('/actividad-balance-pdf/{idactividad}', 'ActividadController@pdf')->name('actividad.balance.pdf');
+
 Route::post('/cierre-actividad', 'ActividadController@cierre')->name('actividad.cierre');
 
 
