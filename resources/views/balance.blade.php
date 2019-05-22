@@ -25,7 +25,7 @@
                         <label for="year"><strong>Año:  </strong></label>
                         {!! Form::select('year',$years,$year,['class'=>'form-control',]) !!}
                     </div>
-                    {!! Form::submit('Enviar',['class'=>'btn btn-primary col-md-6']) !!}
+                    {!! Form::submit('Mostrar',['class'=>'btn btn-primary col-md-6']) !!}
                     <a href="{{ route('balance.mensual.reporte',[$year,$mes]) }}" class="btn btn-warning col-md-6">Imprimir</a>
                 {!! Form::close() !!}
             </div>

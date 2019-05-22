@@ -39,9 +39,8 @@ class BalanceMensualController extends Controller
         $meses = $this->meses;
         $years = $this->years;
 
-        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
-        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
-        $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
+        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('No')->orderby('fecha','asc')->get();
+        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('Si')->orderby('fecha','asc')->get();
         $resumen = Resuman::MovimientoMensual($mes,$year)->first();
         if ($ingresos->count()>0) {
             $total_ingresos = $ingresos->sum('monto'); 
@@ -55,8 +54,8 @@ class BalanceMensualController extends Controller
         }
         
         if (isset($resumen)) {
+            $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->whereNull('idactividad')->orderby('fecha','asc')->get();
             if ($egresos->count()>0) {
-                $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
                 $total_egresos = $egresos->sum('monto');
             }else{
                 $egresos = []; $total_egresos = 0;
