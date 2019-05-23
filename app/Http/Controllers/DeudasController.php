@@ -7,9 +7,10 @@ use App\Miembro;
 use App\Resuman;
 use App\Concepto;
 use App\Actividad;
+use Carbon\Carbon;
 use App\Movimiento;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 class DeudasController extends Controller
 {
@@ -89,16 +90,38 @@ class DeudasController extends Controller
                         'monto'=>$deuda->monto,
                         'fecha'=>$fecha,
                         'tipo'=>$tipo,
-                        'idactividad'=>$deuda->idactividad,
                         'idconcepto'=>$deuda->idconcepto,
                         'observacion'=>$txt.' '.$deuda->descripcion,
-                        'iddeuda'=>$iddeuda,
+                        'iddeuda'=>$deuda->id,
                     ]);
                 }
                 $deuda->estado = $estado;
                 $deuda->fecha = date('Y-m-d');
                 $deuda->save();
             }
+        }
+        return redirect()->route('deudas.dashboard');
+    }
+    public function extornar($iddeuda)
+    {
+        $deuda = Deuda::find($iddeuda);
+        $fecha = Carbon::createFromFormat('Y-m-d',$deuda->fecha_deuda);
+        $resumen = Resuman::MovimientoMensual($fecha->month,$fecha->year)->first();
+        if ($resumen->cerrado) {
+            $movimiento =  Movimiento::where('iddeuda',$iddeuda)->delete();
+            switch ($deuda->estado) {
+                case 'pagado':
+                    $tipo = 'Salida';
+                    $estado = 'por pagar';
+                    break;
+                case 'cobrado':
+                    $tipo = 'Entrada';
+                    $estado = 'por cobrar';
+                    break;                    
+            }
+            $deuda->estado = $estado;
+            $deuda->fecha = date('Y-m-d');
+            $deuda->save();
         }
         return redirect()->route('deudas.dashboard');
     }

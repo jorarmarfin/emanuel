@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Resuman;
 use App\Concepto;
 use App\Actividad;
+use Carbon\Carbon;
 use App\Movimiento;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 class MovimientoController extends Controller
 {
@@ -29,7 +31,15 @@ class MovimientoController extends Controller
     }
     public function create(Request $request)
     {
-        Movimiento::create($request->all());
-        return redirect()->route('caja.dashboard');        
+        $fecha = Carbon::createFromFormat('Y-m-d',$request->get('fecha'));
+        $resumen = Resuman::MovimientoMensual($fecha->month,$fecha->year)->first();
+        if (!$resumen->cerrado) {
+            Movimiento::create($request->all());
+            return redirect()->route('caja.dashboard');  
+        }else{
+            $mensaje = 'La caja ya esta cerrada para esta fecha';
+            $request->session()->flash('flash_message',$mensaje);
+            return back();              
+        }
     }
 }

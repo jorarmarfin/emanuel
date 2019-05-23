@@ -188,7 +188,7 @@
             ajax: v_route,
             columnDefs:[
                 {
-                    targets:9,
+                    targets:10,
                     render: function(data, type, row){
                         if (row.estado=='por pagar') {
                             var clase = 'primary';
@@ -196,14 +196,24 @@
                         }else if(row.estado=='por cobrar'){
                             var clase = 'danger';
                             var nombre = 'Cobrar';
+                        }else if(row.estado=='cobrado'){
+                            var clase = 'success';
+                            var nombre = 'Extorno';
                         }else{
                             var clase = 'warning';
                             var nombre = 'Extorno';
                         }
-                        var cadena = '<button type="button" href="#modalForm" class="btn btn-'+clase+' btn-xs pagar"';
-                            cadena +='id="pagar"  data-toggle="modal" data-target="#exampleModal"';
-                            cadena += ' data-iddeuda="'+data+'"';
-                            cadena += '>'+nombre+'</button>';
+                        var cadena ='';
+                        if (nombre=='Extorno') {
+                            var url_extorno = "{{ url('/deudas-extornar/') }}"+"/"+data;
+                            var cadena = '<a href="'+url_extorno+'" class="btn btn-'+clase+' btn-xs pagar"';
+                                cadena += '>'+nombre+'</a>';                            
+                        } else {
+                            var cadena = '<button type="button" href="#modalForm" class="btn btn-'+clase+' btn-xs pagar"';
+                                cadena +='id="pagar"  data-toggle="modal" data-target="#exampleModal"';
+                                cadena += ' data-iddeuda="'+data+'"';
+                                cadena += '>'+nombre+'</button>';
+                        }
                         return cadena;
                     }
                 }

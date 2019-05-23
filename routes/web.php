@@ -36,6 +36,7 @@ Route::get('/deudas-actividad', 'DeudasController@indexa')->name('deudas.activid
 Route::post('/deudas', 'DeudasController@create')->name('deudas.save');
 Route::get('/deudas-dashboard', 'DeudasController@dashboard')->name('deudas.dashboard');
 Route::post('/deudas-contabilizar', 'DeudasController@contabilizar')->name('deudas.contabilizar');
+Route::get('/deudas-extornar/{iddeuda}', 'DeudasController@extornar')->name('deudas.extornar');
 
 Route::get('/actividad-lista', 'ActividadController@lista')->name('actividad.lista');
 Route::get('/actividad-balance/{idactividad}', 'ActividadController@balance')->name('actividad.balance');

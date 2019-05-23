@@ -54,6 +54,7 @@ class BalanceMensualController extends Controller
         }
         
         if (isset($resumen)) {
+            $rcc = $this->porcentajes($mes,$year,$total_ingresos);
             $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->whereNull('idactividad')->orderby('fecha','asc')->get();
             if ($egresos->count()>0) {
                 $total_egresos = $egresos->sum('monto');
@@ -61,9 +62,8 @@ class BalanceMensualController extends Controller
                 $egresos = []; $total_egresos = 0;
             }
             $saldo_inicial = $resumen->saldo_inicial;
-
             $saldo_mes_siguiente = $saldo_inicial + $total_ingresos + $total_oingresos - $total_egresos;
-            $rcc = $this->porcentajes($mes,$year,$total_ingresos);
+            
             $sw = 1;
             
             return view('balance',
@@ -187,9 +187,9 @@ class BalanceMensualController extends Controller
 		$j = 1;
 
         $resumen = Resuman::MovimientoMensual($mes,$year)->first();
-        $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->orderby('fecha','asc')->get();
+        $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->whereNull('idactividad')->orderby('fecha','asc')->get();
         $total_egresos = $egresos->sum('monto');
-        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->orderby('fecha','asc')->get();
+        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
         
         PDF::SetTextColor(9,0,255);
@@ -246,7 +246,7 @@ class BalanceMensualController extends Controller
         $j++;
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+10, $j*$altodecelda+$incremento);
-        PDF::Cell(140, 5, 'SALDO PARA '.$this->getMes($mes+1), 1, 1, 'C');
+        PDF::Cell(140, 5, 'TOTAL ', 1, 1, 'C');
         #
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
@@ -272,9 +272,9 @@ class BalanceMensualController extends Controller
 		$j = 1;
 
         $resumen = Resuman::MovimientoMensual($mes,$year)->first();
-        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('No')->orderby('fecha','asc')->get();
+        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('No')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
-        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->Excluir('Si')->orderby('fecha','asc')->get();
+        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('Si')->orderby('fecha','asc')->get();
         $total_oingresos = $oingresos->sum('monto');
 
         #Titulos
