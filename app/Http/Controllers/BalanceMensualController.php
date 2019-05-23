@@ -38,6 +38,7 @@ class BalanceMensualController extends Controller
         $year = $request->get('year');
         $meses = $this->meses;
         $years = $this->years;
+        $nombre_mes = $this->getMes($mes);
 
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('No')->orderby('fecha','asc')->get();
         $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('Si')->orderby('fecha','asc')->get();
@@ -68,7 +69,7 @@ class BalanceMensualController extends Controller
             
             return view('balance',
                     compact('sw','ingresos','egresos','meses','years','mes','year','total_ingresos','total_egresos',
-                            'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente')
+                            'resumen','oingresos','total_oingresos','rcc','saldo_mes_siguiente','nombre_mes')
                         );
         }else{
             $request->session()->flash('flash_message', 'No hay registros para esta consulta!');

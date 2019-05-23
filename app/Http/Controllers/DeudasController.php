@@ -91,7 +91,7 @@ class DeudasController extends Controller
                         'fecha'=>$fecha,
                         'tipo'=>$tipo,
                         'idconcepto'=>$deuda->idconcepto,
-                        'observacion'=>$txt.' '.$deuda->descripcion,
+                        'observacion'=>$txt.' '.$deuda->descripcion.'- miembro:'.$deuda->miembro,
                         'iddeuda'=>$deuda->id,
                     ]);
                 }

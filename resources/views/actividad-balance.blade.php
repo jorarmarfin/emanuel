@@ -128,6 +128,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>TOTAL</th>
+                                    <th></th>
                                     <th class="text-right">S/. {{ number_format($total_xcobrar,2) }}</th>
                                 </tr>
                             </tfoot>
