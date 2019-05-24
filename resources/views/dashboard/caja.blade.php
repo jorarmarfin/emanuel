@@ -9,11 +9,11 @@
                     <div class="col-xl-8">
                         <div class="chart-data-selector" id="salesSelectorWrapper">
                             <h2>
-                                Sales:
+                                Movimientos
                                 <strong>
                                     <select class="form-control" id="salesSelector">
-                                        <option value="Porto Admin" selected>Porto Admin</option>
-                                        <option value="Porto Drupal" >Porto Drupal</option>
+                                        <option value="Porto Admin" selected>Ingresos</option>
+                                        <option value="Porto Drupal" >Egresos</option>
                                         <option value="Porto Wordpress" >Porto Wordpress</option>
                                     </select>
                                 </strong>
@@ -144,7 +144,7 @@
                                 <div class="summary">
                                     <h4 class="title">Deudas por pagar</h4>
                                     <div class="info">
-                                        <strong class="amount">$ 14,890.30</strong>
+                                        <strong class="amount">S/. {{ $total_xpagar }}</strong>
                                     </div>
                                 </div>
                                 <div class="summary-footer">
@@ -170,7 +170,7 @@
                                 <div class="summary">
                                     <h4 class="title">Deudas por Cobrar</h4>
                                     <div class="info">
-                                        <strong class="amount">38</strong>
+                                        <strong class="amount">S/. {{ $total_xcobrar }}</strong>
                                     </div>
                                 </div>
                                 <div class="summary-footer">
@@ -206,6 +206,94 @@
                 </section>
             </div>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-6">   
+        <section class="card">
+            <header class="card-header">
+                <div class="card-actions">
+                    <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                    <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                </div>
+
+                <h2 class="card-title">Deudas por Cobrar</h2>
+            </header>
+            <div class="card-body">
+                <table class="table table-responsive-md table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Concepto</th>
+                            <th>Fecha de la deuda</th>
+                            <th class="text-right">Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($xcobrar as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{$item->miembro.' ('.$item->estado.')' }}</td>
+                            <td>{{$item->fecha_deuda }}</td>
+                            <td class="text-right">{{$item->monto_d }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>TOTAL</th>
+                            <th></th>
+                            <th class="text-right">S/.{{ $total_xcobrar }} </th>
+                        </tr>
+                    </tfoot>
+                    
+                </table>
+            </div>
+        </section>
+    </div>
+    <div class="col-xl-6">   
+        <section class="card">
+            <header class="card-header">
+                <div class="card-actions">
+                    <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                    <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+                </div>
+
+                <h2 class="card-title">Deudas por Pagar</h2>
+            </header>
+            <div class="card-body">
+                <table class="table table-responsive-md table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Concepto</th>
+                            <th>Fecha de la deuda</th>
+                            <th class="text-right">Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($xpagar as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{$item->miembro.' ('.$item->estado.')' }}</td>
+                            <td>{{$item->fecha_deuda }}</td>
+                            <td class="text-right">{{$item->monto_d }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>TOTAL</th>
+                            <th></th>
+                            <th class="text-right">S/.{{ $total_xpagar }} </th>
+                        </tr>
+                    </tfoot>
+                    
+                </table>
+            </div>
+        </section>
     </div>
 </div>
 
