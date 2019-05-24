@@ -30,7 +30,8 @@ class BalanceMensualController extends Controller
         $egresos = [];
         $mes = (int)date('m'); $year=null; $total_ingresos = 0;
         $sw = 0;
-        return view('balance',compact('ingresos','egresos','meses','years','mes','year','sw'));
+        $nombre_mes = '';
+        return view('balance',compact('ingresos','egresos','meses','years','mes','year','sw','nombre_mes'));
     }
     public function balance(Request $request)
     {
