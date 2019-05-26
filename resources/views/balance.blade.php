@@ -177,19 +177,19 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>15%</td>
+                                <td>{{ $rcc['zona']['label'] }}</td>
                                 <td>Zona</td>
-                                <td class="text-right">S/. {{ $rcc['zona'] }}</td>
+                                <td class="text-right">S/. {{ $rcc['zona']['valor'] }}</td>
                             </tr>
                             <tr>
-                                <td>30%</td>
+                                <td>{{ $rcc['diocesis']['label'] }}</td>
                                 <td>Diocesis</td>
-                                <td class="text-right">S/. {{ $rcc['diocesis'] }}</td>
+                                <td class="text-right">S/. {{ $rcc['diocesis']['valor'] }}</td>
                             </tr>
                             <tr>
-                                <td>5%</td>
+                                <td>{{ $rcc['sacerdotes']['label'] }}</td>
                                 <td>Sacerdotes</td>
-                                <td class="text-right">S/. {{ $rcc['sacerdotes'] }}</td>
+                                <td class="text-right">S/. {{ $rcc['sacerdotes']['valor'] }}</td>
                             </tr>
                             <tr>
                                 <td>3 S</td>

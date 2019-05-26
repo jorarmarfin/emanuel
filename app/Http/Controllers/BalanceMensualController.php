@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Resuman;
 use App\Concepto;
 use Carbon\Carbon;
 use App\Movimiento;
+use App\Porcentaje;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use PDF;
 
 class BalanceMensualController extends Controller
 {
@@ -30,7 +31,7 @@ class BalanceMensualController extends Controller
         $egresos = [];
         $mes = (int)date('m'); $year=null; $total_ingresos = 0;
         $sw = 0;
-        $nombre_mes = '';
+        $nombre_mes = '';        
         return view('balance',compact('ingresos','egresos','meses','years','mes','year','sw','nombre_mes'));
     }
     public function balance(Request $request)
@@ -82,14 +83,25 @@ class BalanceMensualController extends Controller
         $concepto = Concepto::select('id')->where('nombre','Porcentajes RCC')->first();
         $ofrendas = Concepto::select('id')->where('nombre','Ofrenda de Sabado')->first();
         $tres = Movimiento::MovimientoTerceraSemana($mes,$year,'Entrada',$ofrendas->id)->orderby('fecha','asc')->get();
+        $diocesis = Porcentaje::where('nombre','diocesis')->first();
+        $zona = Porcentaje::where('nombre','zona')->first();
+        $sacerdotes = Porcentaje::where('nombre','sacerdotes')->first();
         if ($tres->count()>=4) {
             $suma_ingresos = $total_ingresos-$tres[2]->monto;
-            $rcc['diocesis'] = 0.3*$suma_ingresos;
-            $rcc['nacional'] = $tres[2]->monto;
-            $sacerdotes = 0.05*$suma_ingresos;
-            $rcc['sacerdotes'] = ($sacerdotes<5) ? 5 : $sacerdotes ;
-            $rcc['zona'] = 0.15*$suma_ingresos;
-            $rcc['total'] = $rcc['diocesis']+$rcc['nacional']+$rcc['sacerdotes']+$rcc['zona'];
+            $rcc['diocesis']['valor'] = $diocesis->valor_p*$suma_ingresos; 
+            $rcc['diocesis']['label'] = $diocesis->valor_l;
+            $rcc['diocesis']['nombre'] = 'Diocesis';
+            $rcc['nacional']['valor'] = $tres[2]->monto;
+            $rcc['nacional']['label'] = '3 S';
+            $rcc['nacional']['nombre'] = 'Nacional';
+            $sacerdotes_tmp = $sacerdotes->valor_p*$suma_ingresos;
+            $rcc['sacerdotes']['valor'] = ($sacerdotes_tmp<5) ? 5 : $sacerdotes_tmp ; 
+            $rcc['sacerdotes']['label'] = $sacerdotes->valor_l;
+            $rcc['sacerdotes']['nombre'] = 'Sacerdotes';
+            $rcc['zona']['valor'] = $zona->valor_p*$suma_ingresos; 
+            $rcc['zona']['label'] = $zona->valor_l;
+            $rcc['zona']['nombre'] = 'Zona';
+            $rcc['total'] = $rcc['diocesis']['valor']+$rcc['nacional']['valor']+$rcc['sacerdotes']['valor']+$rcc['zona']['valor'];
 
             $pregunta = Movimiento::MovimientoMensual($mes,$year,'Salida')->where('idconcepto',$concepto->id)->get();
             if ($pregunta->count()==0) {
@@ -106,10 +118,19 @@ class BalanceMensualController extends Controller
             }
 
         }else{
-            $rcc['diocesis'] = 0;
-            $rcc['nacional'] = 0;
-            $rcc['sacerdotes'] = 0;
-            $rcc['zona'] = 0;
+
+            $rcc['diocesis']['valor'] = 0;
+            $rcc['diocesis']['label'] = $diocesis->valor_l;
+            $rcc['diocesis']['nombre'] = 'Diocesis';
+            $rcc['nacional']['valor'] = 0;
+            $rcc['nacional']['label'] = '3 S';
+            $rcc['nacional']['nombre'] = 'Nacional';
+            $rcc['sacerdotes']['valor'] = 0;
+            $rcc['sacerdotes']['label'] = $sacerdotes->valor_l;
+            $rcc['sacerdotes']['nombre'] = 'Sacerdotes';
+            $rcc['zona']['valor'] = 0;
+            $rcc['zona']['label'] = $zona->valor_l;
+            $rcc['zona']['valor'] = 'Zona';
             $rcc['total'] = 0;
         }
         return $rcc;
@@ -162,7 +183,7 @@ class BalanceMensualController extends Controller
         PDF::SetTitle('BALANCE MENSUAL');
         
         PDF::SetAutoPageBreak(false);
-        $this->pdfIngreso($year,$mes);
+        //$this->pdfIngreso($year,$mes);
         $this->pdfEgreso($year,$mes);
         $archivo = public_path('storage/').$year.'_'.$mes.'.pdf';
         
@@ -193,7 +214,7 @@ class BalanceMensualController extends Controller
         $total_egresos = $egresos->sum('monto');
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
-        
+        $rcc = $this->porcentajes($mes,$year,$total_ingresos);
         PDF::SetTextColor(9,0,255);
         #Egresos
         while ($i < $egresos->count()) {
@@ -224,7 +245,62 @@ class BalanceMensualController extends Controller
         }//cierre del while
 
         $incremento += 5;
+        #rcc
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, 'RCC ', 1, 1, 'C');
+        #
+        $j++;
+        PDF::SetXY($x+10,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(10, 5, $rcc['diocesis']['label'], 1, 1, 'C');
+        #
+        PDF::SetXY($x+20,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(100, 5, $rcc['diocesis']['nombre'], 1, 1, 'L');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+120, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, number_format($rcc['diocesis']['valor'],2), 1, 1, 'R');
+        $j++;
+        PDF::SetXY($x+10,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(10, 5, $rcc['zona']['label'], 1, 1, 'C');
+        #
+        PDF::SetXY($x+20,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(100, 5, $rcc['zona']['nombre'], 1, 1, 'L');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+120, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, number_format($rcc['zona']['valor'],2), 1, 1, 'R');
+        $j++;
+        PDF::SetXY($x+10,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(10, 5, $rcc['sacerdotes']['label'], 1, 1, 'C');
+        #
+        PDF::SetXY($x+20,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(100, 5, $rcc['sacerdotes']['nombre'], 1, 1, 'L');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+120, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, number_format($rcc['sacerdotes']['valor'],2), 1, 1, 'R');
+        $j++;
+        PDF::SetXY($x+10,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(10, 5, $rcc['nacional']['label'], 1, 1, 'C');
+        #
+        PDF::SetXY($x+20,$j*$altodecelda+$incremento);
+        PDF::SetFont('helvetica', '', 9);
+        PDF::Cell(100, 5, $rcc['nacional']['nombre'], 1, 1, 'L');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+120, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, number_format($rcc['nacional']['valor'],2), 1, 1, 'R');
+        $j++;
         #Totales
+        PDF::SetTextColor(0);
         PDF::SetTextColor(0);
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+10, $j*$altodecelda+$incremento);
