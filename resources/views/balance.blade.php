@@ -192,9 +192,9 @@
                                 <td class="text-right">S/. {{ $rcc['sacerdotes']['valor'] }}</td>
                             </tr>
                             <tr>
-                                <td>3 S</td>
+                                <td>{{ $rcc['nacional']['label'] }}</td>
                                 <td>Nacional</td>
-                                <td class="text-right">S/. {{ $rcc['nacional'] }}</td>
+                                <td class="text-right">S/. {{ $rcc['nacional']['valor'] }}</td>
                             </tr>
                         </tbody>
                         <tfoot>
