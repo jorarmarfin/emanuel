@@ -120,7 +120,7 @@
                                 <div class="summary">
                                     <h4 class="title">Saldo Actual</h4>
                                     <div class="info">
-                                        <strong class="amount">S/. {{ $resumen->saldo_inicial }}</strong>
+                                        <strong class="amount">S/. {{ $caja }}</strong>
                                     </div>
                                 </div>
                                 <div class="summary-footer">
