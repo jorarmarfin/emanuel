@@ -183,7 +183,7 @@ class BalanceMensualController extends Controller
         PDF::SetTitle('BALANCE MENSUAL');
         
         PDF::SetAutoPageBreak(false);
-        //$this->pdfIngreso($year,$mes);
+        $this->pdfIngreso($year,$mes);
         $this->pdfEgreso($year,$mes);
         $archivo = public_path('storage/').$year.'_'.$mes.'.pdf';
         
