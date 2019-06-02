@@ -130,7 +130,7 @@ class BalanceMensualController extends Controller
             $rcc['sacerdotes']['nombre'] = 'Sacerdotes';
             $rcc['zona']['valor'] = 0;
             $rcc['zona']['label'] = $zona->valor_l;
-            $rcc['zona']['valor'] = 'Zona';
+            $rcc['zona']['nombre'] = 'Zona';
             $rcc['total'] = 0;
         }
         return $rcc;
