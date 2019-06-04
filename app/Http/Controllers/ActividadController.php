@@ -210,7 +210,7 @@ class ActividadController extends Controller
 			#
 			PDF::SetXY($x+20,$j*$altodecelda+$incremento);
             PDF::SetFont('helvetica', '', 9);
-			PDF::Cell(100, 5, $ingresos[$i]['concepto'].' ('.$egresos[$i]['observacion'].')', 1, 1, 'L');
+			PDF::Cell(100, 5, $ingresos[$i]['concepto'].' ('.$ingresos[$i]['observacion'].')', 1, 1, 'L');
 			#
 			PDF::SetFont('helvetica', '', 11);
 			PDF::SetXY($x+120, $j*$altodecelda+$incremento);
