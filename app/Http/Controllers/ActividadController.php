@@ -28,7 +28,7 @@ class ActividadController extends Controller
         $xcobrar = Deuda::where('idactividad',$idactividad)->whereIn('estado',['por cobrar','cobrado'])->get();
         $total_xcobrar = $xcobrar->sum('monto'); 
 
-        $ganancia = $total_ingresos + $total_xcobrar - $total_egresos; 
+        $ganancia = $total_ingresos - $total_egresos; 
         $ganancia_liquida = $ganancia - $total_xcobrar;
 
         return view('actividad-balance',

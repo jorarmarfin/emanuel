@@ -140,7 +140,7 @@
     </div>
     <div class="col-md-6">
         <section class="card">
-            <span class=" text-right alert alert-primary">INGRESO S/.{{ $total_ingresos + $total_xcobrar }}</span>
+            <span class=" text-right alert alert-primary">INGRESO S/.{{ $total_ingresos }}</span>
             <span class=" text-right alert alert-danger">EGRESO S/.{{ $total_egresos }}</span>
             <span class=" text-right alert alert-warning">GANACIA S/.{{ $ganancia }}</span>
             <span class=" text-right alert alert-primary">POR COBRAR S/.{{ $total_xcobrar }}</span>
