@@ -79,6 +79,7 @@ class ActividadController extends Controller
         PDF::AddPage('U','A4');
         PDF::SetXY(20,15);
         PDF::SetFont('helvetica','b',22);
+        PDF::SetTextColor(0);
         PDF::Cell(170,15,"HABER ".$actividad->nombre." ".$actividad->fecha,1,0,'C');
 
         $pagina = 0;
@@ -138,7 +139,7 @@ class ActividadController extends Controller
         #
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
-        PDF::Cell(30, 5, 'S/. '.number_format($total_ingresos + $total_xcobrar,2), 1, 1, 'R');
+        PDF::Cell(30, 5, 'S/. '.number_format($total_ingresos,2), 1, 1, 'R');
         #
         $j++;
         PDF::SetFont('helvetica', 'B', 11);
@@ -155,7 +156,7 @@ class ActividadController extends Controller
         #
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
-        $ganancia = $total_ingresos + $total_xcobrar - $total_egresos;
+        $ganancia = $total_ingresos - $total_egresos;
         PDF::Cell(30, 5, 'S/. '.number_format($ganancia,2), 1, 1, 'R');
         $j++;
         PDF::SetFont('helvetica', 'B', 11);
@@ -164,7 +165,7 @@ class ActividadController extends Controller
         #
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
-        $ganancia = $total_ingresos + $total_xcobrar - $total_egresos;
+        $ganancia = $total_ingresos  - $total_egresos;
         PDF::Cell(30, 5, 'S/. '.number_format($total_xcobrar,2), 1, 1, 'R');
         $j++;
         PDF::SetFont('helvetica', 'B', 11);
@@ -175,6 +176,15 @@ class ActividadController extends Controller
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
         $ganancia_liquida = $ganancia - $total_xcobrar;
         PDF::Cell(30, 5, 'S/. '.number_format($ganancia_liquida,2), 1, 1, 'R');
+        $j++;
+        $incremento += 30;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(60, 5, 'FIRMA DEL COORDINADOR', 'T', 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+90, $j*$altodecelda+$incremento);
+        PDF::Cell(60, 5, 'FIRMA DEL TESORERO', 'T', 1, 'C');
 
     }
     public function pdfIngreso($idactividad)
@@ -229,6 +239,16 @@ class ActividadController extends Controller
         }//cierre del while
         $xcobrar = Deuda::where('idactividad',$idactividad)->whereIn('estado',['por cobrar','cobrado'])->get();
         $total_xcobrar = $xcobrar->sum('monto'); 
+        #
+        PDF::SetTextColor(0);
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(140, 5, 'INGRESO TOTAL', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+150, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, 'S/. '.number_format($total_ingresos,2), 1, 1, 'R');
+        #
         $i = 0;
         $incremento += 10;
         #Deudas

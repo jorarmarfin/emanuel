@@ -226,7 +226,7 @@ class BalanceMensualController extends Controller
 			#
 			PDF::SetXY($x+20,$j*$altodecelda+$incremento);
             PDF::SetFont('helvetica', '', 9);
-			PDF::Cell(100, 5, $egresos[$i]['concepto'], 1, 1, 'L');
+			PDF::Cell(100, 5, $egresos[$i]['concepto'].' ('.$egresos[$i]['observacion'].')', 1, 1, 'L');
 			#
 			PDF::SetFont('helvetica', 'B', 11);
 			PDF::SetXY($x+120, $j*$altodecelda+$incremento);
@@ -235,6 +235,7 @@ class BalanceMensualController extends Controller
             $i++;
 
             if ($i == $egresos->count()) {
+                PDF::SetTextColor(0);
                 PDF::SetFont('helvetica', 'B', 11);
                 PDF::SetXY($x+150, $j*$altodecelda+$incremento);
                 PDF::Cell(30, 5, 'S/. '.number_format($total_egresos,2), 1, 1, 'R');
@@ -246,9 +247,11 @@ class BalanceMensualController extends Controller
 
         $incremento += 5;
         #rcc
+        
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+10, $j*$altodecelda+$incremento);
         PDF::Cell(30, 5, 'RCC ', 1, 1, 'C');
+        PDF::SetTextColor(9,0,255);
         #
         $j++;
         PDF::SetXY($x+10,$j*$altodecelda+$incremento);
@@ -330,6 +333,48 @@ class BalanceMensualController extends Controller
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
         $saldo_final = $saldo_final + $total_egresos;
         PDF::Cell(30, 5, 'S/. '.number_format($saldo_final,2), 1, 1, 'R');
+        #RESUMEN
+        $j++;
+        $incremento += 15;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(50, 5, 'RESUMEN ', 1, 1, 'C');
+        $j++;
+        PDF::SetFont('helvetica', '', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(50, 5, 'Total de ingresos', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', '', 11);
+        PDF::SetXY($x+60, $j*$altodecelda+$incremento);
+        $t_i = $total_ingresos+$resumen->saldo_inicial;
+        PDF::Cell(30, 5, 'S/. '.number_format($t_i,2), 1, 1, 'R');
+        $j++;
+        PDF::SetFont('helvetica', '', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(50, 5, 'Total de egresos', 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', '', 11);
+        PDF::SetXY($x+60, $j*$altodecelda+$incremento);
+        PDF::Cell(30, 5, 'S/. '.number_format($total_egresos,2), 1, 1, 'R');
+        $j++;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(50, 5, 'SALDO PARA '.$this->getMes($mes+1), 1, 1, 'C');
+        #
+        PDF::SetFont('helvetica', '', 11);
+        PDF::SetXY($x+60, $j*$altodecelda+$incremento);
+        $saldo = $t_i - $total_egresos;
+        PDF::Cell(30, 5, 'S/. '.number_format($saldo,2), 1, 1, 'R');
+        #
+        $j++;
+        $incremento += 30;
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+10, $j*$altodecelda+$incremento);
+        PDF::Cell(60, 5, 'FIRMA DEL COORDINADOR', 'T', 1, 'C');
+        #
+        PDF::SetFont('helvetica', 'B', 11);
+        PDF::SetXY($x+90, $j*$altodecelda+$incremento);
+        PDF::Cell(60, 5, 'FIRMA DEL TESORERO', 'T', 1, 'C');
     }
     public function pdfIngreso($year,$mes)
     {
@@ -387,6 +432,7 @@ class BalanceMensualController extends Controller
             $i++;
 
             if ($i == $ingresos->count()) {
+                PDF::SetTextColor(0);
                 PDF::SetFont('helvetica', 'B', 11);
                 PDF::SetXY($x+150, $j*$altodecelda+$incremento);
                 PDF::Cell(30, 5, 'S/. '.number_format($total_ingresos,2), 1, 1, 'R');
@@ -416,7 +462,12 @@ class BalanceMensualController extends Controller
 			#
 			PDF::SetXY($x+20,$j*$altodecelda+$incremento);
             PDF::SetFont('helvetica', '', 9);
-			PDF::Cell(100, 5, $oingresos[$i]['concepto'], 1, 1, 'L');
+            if ($oingresos[$i]['concepto']=='Otros') {
+                PDF::Cell(100, 5, $oingresos[$i]['concepto'].' ('.$oingresos[$i]['observacion'].')', 1, 1, 'L');
+            } else {
+                PDF::Cell(100, 5, $oingresos[$i]['concepto'], 1, 1, 'L');
+            }
+            
 			#
 			PDF::SetFont('helvetica', 'B', 11);
 			PDF::SetXY($x+120, $j*$altodecelda+$incremento);
@@ -425,6 +476,7 @@ class BalanceMensualController extends Controller
             $i++;
 
             if ($i == $oingresos->count()) {
+                PDF::SetTextColor(0);
                 PDF::SetFont('helvetica', 'B', 11);
                 PDF::SetXY($x+150, $j*$altodecelda+$incremento);
                 PDF::Cell(30, 5, 'S/. '.number_format($total_oingresos,2), 1, 1, 'R');
