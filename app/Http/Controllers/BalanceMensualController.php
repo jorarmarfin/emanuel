@@ -214,6 +214,9 @@ class BalanceMensualController extends Controller
         $total_egresos = $egresos->sum('monto');
         $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('No')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
+        $oingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('Si')->orderby('fecha','asc')->get();
+        $total_oingresos = $oingresos->sum('monto');
+        
         $rcc = $this->porcentajes($mes,$year,$total_ingresos);
         PDF::SetTextColor(9,0,255);
         #Egresos
@@ -321,7 +324,7 @@ class BalanceMensualController extends Controller
         #
         PDF::SetFont('helvetica', 'B', 11);
         PDF::SetXY($x+150, $j*$altodecelda+$incremento);
-        $saldo_final = $total_ingresos + $resumen->saldo_inicial - $total_egresos;
+        $saldo_final = $total_ingresos + $total_oingresos + $resumen->saldo_inicial - $total_egresos;
         PDF::Cell(30, 5, 'S/. '.number_format($saldo_final,2), 1, 1, 'R');
         #
         $j++;
@@ -346,7 +349,7 @@ class BalanceMensualController extends Controller
         #
         PDF::SetFont('helvetica', '', 11);
         PDF::SetXY($x+60, $j*$altodecelda+$incremento);
-        $t_i = $total_ingresos+$resumen->saldo_inicial;
+        $t_i = $total_ingresos+$total_oingresos+$resumen->saldo_inicial;
         PDF::Cell(30, 5, 'S/. '.number_format($t_i,2), 1, 1, 'R');
         $j++;
         PDF::SetFont('helvetica', '', 11);
