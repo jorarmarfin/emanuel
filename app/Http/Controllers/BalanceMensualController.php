@@ -423,7 +423,7 @@ class BalanceMensualController extends Controller
 			#
 			PDF::SetXY($x+20,$j*$altodecelda+$incremento);
             PDF::SetFont('helvetica', '', 9);
-            $retVal = (strlen($ingreso[$i]['observacion'])>0) ? $ingreso[$i]['observacion'] : '' ;
+            $retVal = (strlen($ingreso[$i]['observacion'])>0) ? $ingresos[$i]['observacion'] : '' ;
 			PDF::Cell(100, 5, $ingresos[$i]['concepto'], 1, 1, 'L');
 			#
 			PDF::SetFont('helvetica', 'B', 11);
