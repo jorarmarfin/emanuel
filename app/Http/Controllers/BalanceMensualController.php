@@ -212,7 +212,7 @@ class BalanceMensualController extends Controller
         $resumen = Resuman::MovimientoMensual($mes,$year)->first();
         $egresos = Movimiento::MovimientoMensual($mes,$year,'Salida')->whereNull('idactividad')->orderby('fecha','asc')->get();
         $total_egresos = $egresos->sum('monto');
-        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->orderby('fecha','asc')->get();
+        $ingresos = Movimiento::MovimientoMensual($mes,$year,'Entrada')->whereNull('idactividad')->Excluir('No')->orderby('fecha','asc')->get();
         $total_ingresos = $ingresos->sum('monto');
         $rcc = $this->porcentajes($mes,$year,$total_ingresos);
         PDF::SetTextColor(9,0,255);
