@@ -148,17 +148,17 @@
         </section>
     </div>
 </div>
-@if ($actividad->cerrado=='no')    
-    <div class="row">
-        <div class="col-md-12">
+<div class="row">
+    <div class="col-md-12">
+            @if ($actividad->cerrado=='no')    
             {!! Form::open(['route' => 'actividad.cierre', 'method' => 'post','class'=>'row']) !!}
                 {!! Form::hidden('idactividad',$actividad->id) !!}
                 {!! Form::hidden('ganancia',$ganancia_liquida) !!}
                 {!! Form::submit('Cerrar',['class'=>'btn btn-danger col-md-6']) !!}
-                <a href="{{ route('actividad.balance.reporte',$actividad->id) }}" class="btn btn-warning col-md-6">Imprimir</a>
             {!! Form::close() !!}
+            @endif
+            <a href="{{ route('actividad.balance.reporte',$actividad->id) }}" class="btn btn-warning col-md-6">Imprimir</a>
         </div>
     </div>
-@endif
 @endsection
 @section('titulo-pagina','Actividad económica '.$actividad->nombre.' '.$actividad->fecha)
